@@ -36,7 +36,6 @@ New-Item -ItemType Directory -Path (Join-Path $runtimeRoot "ui\layout") -Force |
     "intro_skip.dll",
     "mod.mod_info",
     "mod.override_info",
-    "settings.json",
     "thumbnail.png",
     "README.md",
     "LICENSE",

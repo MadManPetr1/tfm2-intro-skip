@@ -787,9 +787,9 @@ body:color {
       }
 
       #intro_skip_settings:color {
-        y: 358px;
+        y: 134px;
         width: 700px;
-        height: 216px;
+        height: 440px;
         z: 10;
         visible: false;
 
@@ -801,26 +801,40 @@ body:color {
 
         #intro_skip_settings_title:label {
           @"asset/base/style/main#bold_label";
-          x: 16px;
-          y: 8px;
-          width: 668px;
-          height: 24px;
+          x: 20px;
+          y: 16px;
+          width: 660px;
+          height: 28px;
 
           align_x: Left;
           align_y: Center;
-          size: 18;
-          text: "Intro Skip • Safe Startup";
+          size: 20;
+          text: "Startup automation";
+        }
+
+        #intro_skip_settings_subtitle:label {
+          @"asset/base/style/main#label";
+          x: 20px;
+          y: 44px;
+          width: 660px;
+          height: 20px;
+
+          align_x: Left;
+          align_y: Center;
+          size: 14;
+          color: #a3a9b6ff;
+          text: "Choose what happens after launch. Changes save immediately.";
         }
 
         #intro_skip_disclaimer_on:color_icon_button {
           @"asset/base/style/main#primary_button";
-          x: 16px;
-          y: 36px;
-          width: 668px;
-          height: 36px;
+          x: 20px;
+          y: 76px;
+          width: 660px;
+          height: 52px;
 
           text: {
-            text: "Skip disclaimer: ON";
+            text: "Skip startup disclaimer: ON";
             font: "asset/base/font/set/bold";
             size: 16;
             align_x: Center;
@@ -830,14 +844,14 @@ body:color {
 
         #intro_skip_disclaimer_off:color_icon_button {
           @"asset/base/style/main#tertiary_button";
-          x: 16px;
-          y: 36px;
-          width: 668px;
-          height: 36px;
+          x: 20px;
+          y: 76px;
+          width: 660px;
+          height: 52px;
           visible: false;
 
           text: {
-            text: "Skip disclaimer: OFF";
+            text: "Skip startup disclaimer: OFF";
             font: "asset/base/font/set/bold";
             size: 16;
             align_x: Center;
@@ -847,10 +861,11 @@ body:color {
 
         #intro_skip_continue_on:color_icon_button {
           @"asset/base/style/main#primary_button";
-          x: 16px;
-          y: 76px;
-          width: 668px;
-          height: 36px;
+          x: 20px;
+          y: 140px;
+          width: 660px;
+          height: 52px;
+          visible: false;
 
           text: {
             text: "Automatically select Continue: ON";
@@ -863,11 +878,10 @@ body:color {
 
         #intro_skip_continue_off:color_icon_button {
           @"asset/base/style/main#tertiary_button";
-          x: 16px;
-          y: 76px;
-          width: 668px;
-          height: 36px;
-          visible: false;
+          x: 20px;
+          y: 140px;
+          width: 660px;
+          height: 52px;
 
           text: {
             text: "Automatically select Continue: OFF";
@@ -880,13 +894,14 @@ body:color {
 
         #intro_skip_force_on:color_icon_button {
           @"asset/base/style/main#primary_button";
-          x: 16px;
-          y: 116px;
-          width: 668px;
-          height: 36px;
+          x: 20px;
+          y: 204px;
+          width: 660px;
+          height: 52px;
+          visible: false;
 
           text: {
-            text: "Automatically Load Anyway on mod mismatch: ON";
+            text: "Automatically Load Anyway on mismatch: ON";
             font: "asset/base/font/set/bold";
             size: 16;
             align_x: Center;
@@ -896,14 +911,13 @@ body:color {
 
         #intro_skip_force_off:color_icon_button {
           @"asset/base/style/main#tertiary_button";
-          x: 16px;
-          y: 116px;
-          width: 668px;
-          height: 36px;
-          visible: false;
+          x: 20px;
+          y: 204px;
+          width: 660px;
+          height: 52px;
 
           text: {
-            text: "Automatically Load Anyway on mod mismatch: OFF";
+            text: "Automatically Load Anyway on mismatch: OFF";
             font: "asset/base/font/set/bold";
             size: 16;
             align_x: Center;
@@ -913,10 +927,10 @@ body:color {
 
         #intro_skip_import_backup:color_icon_button {
           @"asset/base/style/main#secondary_button";
-          x: 16px;
-          y: 156px;
-          width: 668px;
-          height: 36px;
+          x: 20px;
+          y: 284px;
+          width: 660px;
+          height: 52px;
 
           text: {
             text: "Import latest automatic backup into Load menu";
@@ -929,44 +943,44 @@ body:color {
 
         #intro_skip_import_default:label {
           @"asset/base/style/main#label";
-          x: 16px;
-          y: 194px;
-          width: 668px;
-          height: 18px;
+          x: 20px;
+          y: 352px;
+          width: 660px;
+          height: 24px;
 
           align_x: Center;
           align_y: Center;
-          size: 13;
+          size: 14;
           color: #c2c6ceff;
-          text: "Backups retained for 7 days • Recovery import always remains manual";
+          text: "Backups are retained for 7 days • Recovery always stays manual";
         }
 
         #intro_skip_import_success:label {
           @"asset/base/style/main#bold_label";
-          x: 16px;
-          y: 194px;
-          width: 668px;
-          height: 18px;
+          x: 20px;
+          y: 352px;
+          width: 660px;
+          height: 24px;
           visible: false;
 
           align_x: Center;
           align_y: Center;
-          size: 13;
+          size: 14;
           color: #37d5b3ff;
           text: "Backup imported successfully • Open Load to select it";
         }
 
         #intro_skip_import_failure:label {
           @"asset/base/style/main#bold_label";
-          x: 16px;
-          y: 194px;
-          width: 668px;
-          height: 18px;
+          x: 20px;
+          y: 352px;
+          width: 660px;
+          height: 24px;
           visible: false;
 
           align_x: Center;
           align_y: Center;
-          size: 13;
+          size: 14;
           color: #ffae4aff;
           text: "Import failed • Details written to backup_status.log";
         }

@@ -6,7 +6,7 @@ This page contains ready-to-paste text for the repository and Steam Workshop lau
 
 **Repository name**
 
-`tfm2-intro-skip`
+`TFM2---Intro-Skip`
 
 **Description**
 
@@ -62,7 +62,7 @@ If automatic Load Anyway is enabled, Intro Skip first copies the latest career s
 
 COMPATIBILITY
 
-Intro Skip 0.4.1 is built for Teamfight Manager 2 0.5.0. Compatibility with newer game versions is not yet verified.
+Intro Skip 0.4.2 is built for Teamfight Manager 2 0.5.0. Compatibility with newer game versions is not yet verified.
 
 RECOVERY
 
@@ -70,15 +70,17 @@ Automatic backups are retained for 7 days. Select Intro Skip in the Mods screen 
 
 This is an independent community mod and is not affiliated with or endorsed by Team Samoyed.
 
-## GitHub v0.4.1 release
+## GitHub v0.4.2 release
 
 **Release title**
 
-Intro Skip v0.4.1 — Initial Public Release
+Intro Skip v0.4.2 — Settings Reliability Fix
 
 **Release notes**
 
 Intro Skip provides safe, configurable startup automation for Teamfight Manager 2 0.5.0.
+
+Version 0.4.2 fixes the in-game configuration controls not responding in Teamfight Manager 2 0.5.0. It also keeps automatic Continue off if the settings file is unavailable, matching the published safe default.
 
 Highlights:
 
@@ -92,7 +94,7 @@ Highlights:
 
 Only disclaimer skipping is enabled by default. Automatic Continue and Load Anyway remain opt-in.
 
-Install `intro-skip-v0.4.1.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
+Install `intro-skip-v0.4.2.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
 
 ## Launch post
 

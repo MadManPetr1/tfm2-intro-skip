@@ -4,7 +4,6 @@ use std::fs;
 use std::fs::OpenOptions;
 use std::io::{Read, Write};
 use std::path::PathBuf;
-use std::rc::Rc;
 use std::sync::{
     atomic::{AtomicBool, AtomicU8, AtomicUsize, Ordering},
     Arc,
@@ -39,11 +38,28 @@ struct Settings {
     auto_load_anyway: bool,
 }
 
+#[derive(Clone, Copy)]
+enum SettingKey {
+    SkipDisclaimer,
+    AutoContinue,
+    AutoLoadAnyway,
+}
+
+impl SettingKey {
+    fn store(self, settings: &RuntimeSettings, value: bool) {
+        match self {
+            Self::SkipDisclaimer => settings.skip_disclaimer.store(value, Ordering::Release),
+            Self::AutoContinue => settings.auto_continue.store(value, Ordering::Release),
+            Self::AutoLoadAnyway => settings.auto_load_anyway.store(value, Ordering::Release),
+        }
+    }
+}
+
 impl Default for Settings {
     fn default() -> Self {
         Self {
             skip_disclaimer: true,
-            auto_continue: true,
+            auto_continue: false,
             auto_load_anyway: false,
         }
     }
@@ -113,7 +129,7 @@ struct IntroSkipExtension {
     mismatch_backup_ready: AtomicBool,
     mismatch_backup_failed: AtomicBool,
     retention_checked: AtomicBool,
-    handlers_registered: AtomicBool,
+    settings_mouse_down: AtomicBool,
 }
 
 impl ModExtension for IntroSkipExtension {
@@ -124,6 +140,8 @@ impl ModExtension for IntroSkipExtension {
     }
 
     fn post_update(&self, scene: &mut Scene, ui: &mut GameUI, assets: &mut Assets, _dt: f32) {
+        let settings_mouse_pressed = self.left_mouse_pressed();
+
         if !self.retention_checked.swap(true, Ordering::AcqRel) {
             cleanup_expired_backups();
         }
@@ -136,15 +154,6 @@ impl ModExtension for IntroSkipExtension {
             return;
         };
 
-        if node_contains_id(&ui.root, SETTINGS_PANEL_ID)
-            && !self.handlers_registered.swap(true, Ordering::AcqRel)
-        {
-            register_setting_handlers(
-                ui,
-                Arc::clone(&self.settings),
-                Arc::clone(&self.import_notice),
-            );
-        }
         let show_settings = selected_mod_is_intro_skip(&ui.root, assets);
         sync_settings_panel(
             &mut ui.root,
@@ -152,12 +161,59 @@ impl ModExtension for IntroSkipExtension {
             show_settings,
             self.import_notice.current_and_tick(),
         );
+        if show_settings && settings_mouse_pressed {
+            self.handle_settings_mouse_click(ui);
+        }
         self.try_auto_continue(ui);
         self.try_auto_load_anyway(ui);
     }
 }
 
 impl IntroSkipExtension {
+    fn left_mouse_pressed(&self) -> bool {
+        const VK_LBUTTON: i32 = 0x01;
+        let is_down = unsafe { GetAsyncKeyState(VK_LBUTTON) } < 0;
+        let was_down = self.settings_mouse_down.swap(is_down, Ordering::AcqRel);
+        is_down && !was_down
+    }
+
+    fn handle_settings_mouse_click(&self, ui: &GameUI) {
+        let Some((ui_x, ui_y)) = cursor_ui_position(ui) else {
+            return;
+        };
+
+        for (id, key, value) in [
+            (DISCLAIMER_ON_ID, SettingKey::SkipDisclaimer, false),
+            (DISCLAIMER_OFF_ID, SettingKey::SkipDisclaimer, true),
+            (CONTINUE_ON_ID, SettingKey::AutoContinue, false),
+            (CONTINUE_OFF_ID, SettingKey::AutoContinue, true),
+            (FORCE_ON_ID, SettingKey::AutoLoadAnyway, false),
+            (FORCE_OFF_ID, SettingKey::AutoLoadAnyway, true),
+        ] {
+            if node_contains_point(&ui.root, id, ui_x, ui_y) {
+                key.store(&self.settings, value);
+                save_runtime_settings(&self.settings);
+                return;
+            }
+        }
+
+        if node_contains_point(&ui.root, IMPORT_BACKUP_ID, ui_x, ui_y) {
+            match import_latest_backup() {
+                Ok(path) => {
+                    record_backup_status(&format!(
+                        "Imported latest backup into the Load menu: {}",
+                        path.display()
+                    ));
+                    self.import_notice.show(IMPORT_NOTICE_SUCCESS);
+                }
+                Err(error) => {
+                    record_backup_status(&format!("Backup import failed: {error}"));
+                    self.import_notice.show(IMPORT_NOTICE_FAILURE);
+                }
+            }
+        }
+    }
+
     fn try_auto_continue(&self, ui: &GameUI) {
         if !self.settings.auto_continue.load(Ordering::Acquire)
             || self.auto_continue_sent.load(Ordering::Acquire)
@@ -231,10 +287,6 @@ fn skip_disclaimer(scene: &mut Scene) {
     }
 }
 
-fn node_contains_id(node: &Node, id: &str) -> bool {
-    node.id == id || node.child.iter().any(|child| node_contains_id(child, id))
-}
-
 fn find_node<'a>(node: &'a Node, id: &str) -> Option<&'a Node> {
     if node.id == id {
         return Some(node);
@@ -256,65 +308,17 @@ fn set_node_visible(node: &mut Node, id: &str, visible: bool) -> bool {
         .any(|child| set_node_visible(child, id, visible))
 }
 
-fn is_click_for(event: &UIEvent, first: &str, second: &str) -> bool {
-    let matches_id = |value: &str| value.contains(first) || value.contains(second);
-    match event {
-        UIEvent::Click { item, path } => matches_id(item) || matches_id(path),
-        UIEvent::CheckboxSelect { path, .. } => matches_id(path),
-        _ => false,
-    }
-}
-
-fn register_setting_handlers(
-    ui: &mut GameUI,
-    settings: Arc<RuntimeSettings>,
-    import_notice: Arc<ImportNotice>,
-) {
-    let toggle_settings = Arc::clone(&settings);
-    ui.filter_handler.push((
-        Rc::new(|event| is_click_for(event, DISCLAIMER_ON_ID, DISCLAIMER_OFF_ID)),
-        Rc::new(move |_context| {
-            toggle_atomic(&toggle_settings.skip_disclaimer);
-            save_runtime_settings(&toggle_settings);
-        }),
-    ));
-
-    let toggle_settings = Arc::clone(&settings);
-    ui.filter_handler.push((
-        Rc::new(|event| is_click_for(event, CONTINUE_ON_ID, CONTINUE_OFF_ID)),
-        Rc::new(move |_context| {
-            toggle_atomic(&toggle_settings.auto_continue);
-            save_runtime_settings(&toggle_settings);
-        }),
-    ));
-
-    ui.filter_handler.push((
-        Rc::new(|event| is_click_for(event, FORCE_ON_ID, FORCE_OFF_ID)),
-        Rc::new(move |_context| {
-            toggle_atomic(&settings.auto_load_anyway);
-            save_runtime_settings(&settings);
-        }),
-    ));
-    ui.filter_handler.push((
-        Rc::new(|event| is_click_for(event, IMPORT_BACKUP_ID, IMPORT_BACKUP_ID)),
-        Rc::new(move |_context| match import_latest_backup() {
-            Ok(path) => {
-                record_backup_status(&format!(
-                    "Imported latest backup into the Load menu: {}",
-                    path.display()
-                ));
-                import_notice.show(IMPORT_NOTICE_SUCCESS);
-            }
-            Err(error) => {
-                record_backup_status(&format!("Backup import failed: {error}"));
-                import_notice.show(IMPORT_NOTICE_FAILURE);
-            }
-        }),
-    ));
-}
-
-fn toggle_atomic(value: &AtomicBool) {
-    value.fetch_xor(true, Ordering::AcqRel);
+fn node_contains_point(root: &Node, id: &str, x: f32, y: f32) -> bool {
+    let Some(node) = find_node(root, id) else {
+        return false;
+    };
+    node.visible
+        && node.rect.w > 0.0
+        && node.rect.h > 0.0
+        && x >= node.rect.x
+        && x <= node.rect.x + node.rect.w
+        && y >= node.rect.y
+        && y <= node.rect.y + node.rect.h
 }
 
 fn selected_mod_is_intro_skip(root: &Node, assets: &Assets) -> bool {
@@ -339,6 +343,7 @@ fn sync_settings_panel(
     show_settings: bool,
     import_status: u8,
 ) {
+    set_node_visible(root, "description_panel", !show_settings);
     set_node_visible(root, SETTINGS_PANEL_ID, show_settings);
     set_node_visible(root, DISCLAIMER_ON_ID, settings.skip_disclaimer);
     set_node_visible(root, DISCLAIMER_OFF_ID, !settings.skip_disclaimer);
@@ -601,17 +606,35 @@ fn files_are_equal(first: &std::path::Path, second: &std::path::Path) -> Result<
 }
 
 fn record_backup_status(message: &str) {
-    let Some(path) =
-        settings_path().and_then(|path| path.parent().map(|dir| dir.join("backup_status.log")))
-    else {
+    append_status_log("backup_status.log", message);
+}
+
+fn record_runtime_status(message: &str) {
+    append_status_log("runtime_status.log", message);
+}
+
+fn append_status_log(file_name: &str, message: &str) {
+    let Some(directory) = state_dir() else {
         return;
     };
+    if fs::create_dir_all(&directory).is_err() {
+        return;
+    }
+    let path = directory.join(file_name);
     if let Ok(mut file) = OpenOptions::new().create(true).append(true).open(path) {
         let _ = writeln!(file, "{}: {message}", local_timestamp());
     }
 }
 
+fn state_dir() -> Option<PathBuf> {
+    Some(game_data_dir()?.join(MOD_ID))
+}
+
 fn settings_path() -> Option<PathBuf> {
+    Some(state_dir()?.join("settings.json"))
+}
+
+fn legacy_settings_path() -> Option<PathBuf> {
     let executable = std::env::current_exe().ok()?;
     let game_dir = executable.parent()?;
     Some(game_dir.join("mods").join(MOD_ID).join("settings.json"))
@@ -622,8 +645,16 @@ fn load_settings() -> Settings {
     let Some(path) = settings_path() else {
         return settings;
     };
-    let Ok(source) = fs::read_to_string(path) else {
-        return settings;
+
+    let (source, should_persist) = match fs::read_to_string(&path) {
+        Ok(source) => (source, false),
+        Err(_) => match legacy_settings_path().and_then(|path| fs::read_to_string(path).ok()) {
+            Some(source) => (source, true),
+            None => {
+                let _ = write_settings(settings);
+                return settings;
+            }
+        },
     };
 
     settings.skip_disclaimer =
@@ -632,19 +663,32 @@ fn load_settings() -> Settings {
         read_json_bool(&source, "auto_continue").unwrap_or(settings.auto_continue);
     settings.auto_load_anyway =
         read_json_bool(&source, "auto_load_anyway").unwrap_or(settings.auto_load_anyway);
+
+    if should_persist {
+        if let Err(error) = write_settings(settings) {
+            eprintln!("intro_skip: failed to migrate settings: {error}");
+        }
+    }
     settings
 }
 
-fn save_runtime_settings(settings: &RuntimeSettings) {
-    let Some(path) = settings_path() else {
-        return;
+fn write_settings(settings: Settings) -> Result<(), String> {
+    let path = settings_path().ok_or("settings directory is unavailable")?;
+    let Some(directory) = path.parent() else {
+        return Err("settings directory is unavailable".to_string());
     };
-    let settings = settings.snapshot();
+    fs::create_dir_all(directory)
+        .map_err(|error| format!("cannot create {}: {error}", directory.display()))?;
     let source = format!(
         "{{\n  \"skip_disclaimer\": {},\n  \"auto_continue\": {},\n  \"auto_load_anyway\": {}\n}}\n",
         settings.skip_disclaimer, settings.auto_continue, settings.auto_load_anyway
     );
-    if let Err(error) = fs::write(path, source) {
+    fs::write(&path, source).map_err(|error| format!("cannot write {}: {error}", path.display()))
+}
+
+fn save_runtime_settings(settings: &RuntimeSettings) {
+    if let Err(error) = write_settings(settings.snapshot()) {
+        record_runtime_status(&format!("settings_save_failed error={error}"));
         eprintln!("intro_skip: failed to save settings: {error}");
     }
 }
@@ -670,6 +714,12 @@ struct ClientRect {
 }
 
 #[repr(C)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+#[repr(C)]
 struct SystemTimeWindows {
     year: u16,
     month: u16,
@@ -684,8 +734,11 @@ struct SystemTimeWindows {
 #[link(name = "user32")]
 unsafe extern "system" {
     fn FindWindowW(class_name: *const u16, window_name: *const u16) -> *mut c_void;
+    fn GetAsyncKeyState(virtual_key: i32) -> i16;
     fn GetClientRect(window: *mut c_void, rect: *mut ClientRect) -> i32;
+    fn GetCursorPos(point: *mut Point) -> i32;
     fn PostMessageW(window: *mut c_void, message: u32, wparam: usize, lparam: isize) -> i32;
+    fn ScreenToClient(window: *mut c_void, point: *mut Point) -> i32;
 }
 
 #[link(name = "kernel32")]
@@ -723,12 +776,55 @@ fn post_node_click(ui: &GameUI, id: &str) -> bool {
     post_ui_click(ui, ui_x, ui_y)
 }
 
-fn post_ui_click(ui: &GameUI, ui_x: f32, ui_y: f32) -> bool {
+fn game_window() -> *mut c_void {
     let window_title: Vec<u16> = "Teamfight Manager2"
         .encode_utf16()
         .chain(std::iter::once(0))
         .collect();
-    let window = unsafe { FindWindowW(std::ptr::null(), window_title.as_ptr()) };
+    unsafe { FindWindowW(std::ptr::null(), window_title.as_ptr()) }
+}
+
+fn cursor_ui_position(ui: &GameUI) -> Option<(f32, f32)> {
+    let window = game_window();
+    if window.is_null() {
+        return None;
+    }
+
+    let mut point = Point { x: 0, y: 0 };
+    if unsafe { GetCursorPos(&mut point) } == 0
+        || unsafe { ScreenToClient(window, &mut point) } == 0
+    {
+        return None;
+    }
+
+    let mut rect = ClientRect {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+    };
+    if unsafe { GetClientRect(window, &mut rect) } == 0 {
+        return None;
+    }
+
+    let client_width = (rect.right - rect.left) as f32;
+    let client_height = (rect.bottom - rect.top) as f32;
+    if client_width <= 0.0 || client_height <= 0.0 || ui.rect.w <= 0.0 || ui.rect.h <= 0.0 {
+        return None;
+    }
+    if point.x < rect.left || point.y < rect.top || point.x >= rect.right || point.y >= rect.bottom
+    {
+        return None;
+    }
+
+    Some((
+        ui.rect.x + ((point.x - rect.left) as f32 / client_width) * ui.rect.w,
+        ui.rect.y + ((point.y - rect.top) as f32 / client_height) * ui.rect.h,
+    ))
+}
+
+fn post_ui_click(ui: &GameUI, ui_x: f32, ui_y: f32) -> bool {
+    let window = game_window();
     if window.is_null() {
         return false;
     }
@@ -778,7 +874,7 @@ fn init(_ctx: &GameCtx) -> ModRegistration {
         mismatch_backup_ready: AtomicBool::new(false),
         mismatch_backup_failed: AtomicBool::new(false),
         retention_checked: AtomicBool::new(false),
-        handlers_registered: AtomicBool::new(false),
+        settings_mouse_down: AtomicBool::new(false),
     });
     registration
 }

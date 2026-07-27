@@ -11,7 +11,7 @@ Safe, configurable startup automation for **Teamfight Manager 2**.
 </div>
 
 > [!IMPORTANT]
-> Version **0.4.1** is built for Teamfight Manager 2 **0.5.0 only**. Compatibility with newer game versions has not yet been verified.
+> Version **0.4.2** is built for Teamfight Manager 2 **0.5.0 only**. Compatibility with newer game versions has not yet been verified.
 
 ## Features
 
@@ -63,7 +63,13 @@ Open **Mods**, select **Intro Skip**, and use the settings panel:
 - **Automatically Load Anyway on mod mismatch** is deliberately off by default. When enabled, it proceeds only after a verified backup exists.
 - **Import latest automatic backup into Load menu** creates a separate recovery save that you can select manually.
 
-Changes are written to `mods\intro_skip\settings.json`.
+Changes are written outside the Workshop-managed mod folder so updates cannot replace them:
+
+```text
+%APPDATA%\TeamSamoyed\TeamfightManager2\data\intro_skip\settings.json
+```
+
+Existing `mods\intro_skip\settings.json` values are migrated automatically on first launch.
 
 ## Save safety
 
@@ -82,7 +88,11 @@ Backups are stored in:
 %APPDATA%\TeamSamoyed\TeamfightManager2\data\intro_skip_backups
 ```
 
-Managed backups older than seven days are removed. Diagnostic messages are appended to `mods\intro_skip\backup_status.log`.
+Managed backups older than seven days are removed. Diagnostic messages are appended to:
+
+```text
+%APPDATA%\TeamSamoyed\TeamfightManager2\data\intro_skip\backup_status.log
+```
 
 > [!WARNING]
 > No mod can guarantee save compatibility when a career's enabled mods differ. The backup guard reduces recovery risk; it does not make incompatible mod combinations safe.
@@ -111,7 +121,7 @@ To validate and create a player-ready release archive:
 .\scripts\package_release.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk"
 ```
 
-The archive is written to `builds\intro-skip-v0.4.1.zip`.
+The archive is written to `builds\intro-skip-v0.4.2.zip`.
 
 ## Project layout
 
@@ -119,7 +129,7 @@ The archive is written to `builds\intro-skip-v0.4.1.zip`.
 - `ui/layout/title.ui` — title/Mods-screen UI override
 - `mod.mod_info` — mod metadata and supported game range
 - `mod.override_info` — asset remapping
-- `settings.json` — shipped defaults
+- `settings.json` — source reference for the safe defaults; player settings are stored in AppData
 - `thumbnail.png` — 512×512 in-game/Workshop thumbnail
 - `assets/logo-1024.png` — official pixel-art logo master
 - `assets/logo-{512,256,128,64,32}.png` — ready-to-use logo exports

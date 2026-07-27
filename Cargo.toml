@@ -1,6 +1,6 @@
 [package]
 name = "intro_skip"
-version = "0.4.1"
+version = "0.4.2"
 edition = "2021"
 authors = ["MadManPetr1"]
 description = "Skips the startup disclaimer in Teamfight Manager 2 v0.5.0"
