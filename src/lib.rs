@@ -20,22 +20,42 @@ const CONTINUE_ON_ID: &str = "intro_skip_continue_on";
 const CONTINUE_OFF_ID: &str = "intro_skip_continue_off";
 const FORCE_ON_ID: &str = "intro_skip_force_on";
 const FORCE_OFF_ID: &str = "intro_skip_force_off";
-const IMPORT_BACKUP_ID: &str = "intro_skip_import_backup";
-const IMPORT_DEFAULT_ID: &str = "intro_skip_import_default";
-const IMPORT_SUCCESS_ID: &str = "intro_skip_import_success";
-const IMPORT_FAILURE_ID: &str = "intro_skip_import_failure";
+const RETENTION_3_ON_ID: &str = "intro_skip_retention_3_on";
+const RETENTION_3_OFF_ID: &str = "intro_skip_retention_3_off";
+const RETENTION_7_ON_ID: &str = "intro_skip_retention_7_on";
+const RETENTION_7_OFF_ID: &str = "intro_skip_retention_7_off";
+const RETENTION_14_ON_ID: &str = "intro_skip_retention_14_on";
+const RETENTION_14_OFF_ID: &str = "intro_skip_retention_14_off";
+const RETENTION_30_ON_ID: &str = "intro_skip_retention_30_on";
+const RETENTION_30_OFF_ID: &str = "intro_skip_retention_30_off";
+const BACKUP_EMPTY_ID: &str = "intro_skip_backup_empty";
+const BACKUP_BUTTON_IDS: [&str; 5] = [
+    "intro_skip_backup_1",
+    "intro_skip_backup_2",
+    "intro_skip_backup_3",
+    "intro_skip_backup_4",
+    "intro_skip_backup_5",
+];
+const STATUS_READY_ID: &str = "intro_skip_status_ready";
+const STATUS_SAVED_ID: &str = "intro_skip_status_saved";
+const STATUS_RETENTION_ID: &str = "intro_skip_status_retention";
+const STATUS_IMPORT_SUCCESS_ID: &str = "intro_skip_status_import_success";
+const STATUS_FAILURE_ID: &str = "intro_skip_status_failure";
 
-const BACKUP_RETENTION: Duration = Duration::from_secs(7 * 24 * 60 * 60);
-const IMPORT_NOTICE_FRAMES: usize = 300;
-const IMPORT_NOTICE_NONE: u8 = 0;
-const IMPORT_NOTICE_SUCCESS: u8 = 1;
-const IMPORT_NOTICE_FAILURE: u8 = 2;
+const DEFAULT_RETENTION_DAYS: u8 = 7;
+const STATUS_NOTICE_FRAMES: usize = 300;
+const STATUS_READY: u8 = 0;
+const STATUS_SAVED: u8 = 1;
+const STATUS_RETENTION: u8 = 2;
+const STATUS_IMPORT_SUCCESS: u8 = 3;
+const STATUS_FAILURE: u8 = 4;
 
 #[derive(Clone, Copy)]
 struct Settings {
     skip_disclaimer: bool,
     auto_continue: bool,
     auto_load_anyway: bool,
+    backup_retention_days: u8,
 }
 
 #[derive(Clone, Copy)]
@@ -61,6 +81,7 @@ impl Default for Settings {
             skip_disclaimer: true,
             auto_continue: false,
             auto_load_anyway: false,
+            backup_retention_days: DEFAULT_RETENTION_DAYS,
         }
     }
 }
@@ -69,6 +90,7 @@ struct RuntimeSettings {
     skip_disclaimer: AtomicBool,
     auto_continue: AtomicBool,
     auto_load_anyway: AtomicBool,
+    backup_retention_days: AtomicU8,
 }
 
 impl RuntimeSettings {
@@ -77,6 +99,7 @@ impl RuntimeSettings {
             skip_disclaimer: AtomicBool::new(settings.skip_disclaimer),
             auto_continue: AtomicBool::new(settings.auto_continue),
             auto_load_anyway: AtomicBool::new(settings.auto_load_anyway),
+            backup_retention_days: AtomicU8::new(settings.backup_retention_days),
         }
     }
 
@@ -85,19 +108,20 @@ impl RuntimeSettings {
             skip_disclaimer: self.skip_disclaimer.load(Ordering::Acquire),
             auto_continue: self.auto_continue.load(Ordering::Acquire),
             auto_load_anyway: self.auto_load_anyway.load(Ordering::Acquire),
+            backup_retention_days: self.backup_retention_days.load(Ordering::Acquire),
         }
     }
 }
 
-struct ImportNotice {
+struct StatusNotice {
     status: AtomicU8,
     remaining_frames: AtomicUsize,
 }
 
-impl ImportNotice {
+impl StatusNotice {
     fn new() -> Self {
         Self {
-            status: AtomicU8::new(IMPORT_NOTICE_NONE),
+            status: AtomicU8::new(STATUS_READY),
             remaining_frames: AtomicUsize::new(0),
         }
     }
@@ -105,14 +129,14 @@ impl ImportNotice {
     fn show(&self, status: u8) {
         self.status.store(status, Ordering::Release);
         self.remaining_frames
-            .store(IMPORT_NOTICE_FRAMES, Ordering::Release);
+            .store(STATUS_NOTICE_FRAMES, Ordering::Release);
     }
 
     fn current_and_tick(&self) -> u8 {
         let remaining = self.remaining_frames.load(Ordering::Acquire);
         if remaining == 0 {
-            self.status.store(IMPORT_NOTICE_NONE, Ordering::Release);
-            return IMPORT_NOTICE_NONE;
+            self.status.store(STATUS_READY, Ordering::Release);
+            return STATUS_READY;
         }
         self.remaining_frames.fetch_sub(1, Ordering::AcqRel);
         self.status.load(Ordering::Acquire)
@@ -121,7 +145,9 @@ impl ImportNotice {
 
 struct IntroSkipExtension {
     settings: Arc<RuntimeSettings>,
-    import_notice: Arc<ImportNotice>,
+    status_notice: Arc<StatusNotice>,
+    backup_count: AtomicU8,
+    settings_panel_visible: AtomicBool,
     title_ready_frames: AtomicUsize,
     auto_continue_sent: AtomicBool,
     mismatch_ready_frames: AtomicUsize,
@@ -143,7 +169,9 @@ impl ModExtension for IntroSkipExtension {
         let settings_mouse_pressed = self.left_mouse_pressed();
 
         if !self.retention_checked.swap(true, Ordering::AcqRel) {
-            cleanup_expired_backups();
+            let _ = cleanup_expired_backups(
+                self.settings.backup_retention_days.load(Ordering::Acquire),
+            );
         }
 
         if self.settings.skip_disclaimer.load(Ordering::Acquire) {
@@ -155,11 +183,18 @@ impl ModExtension for IntroSkipExtension {
         };
 
         let show_settings = selected_mod_is_intro_skip(&ui.root, assets);
+        let was_showing_settings = self
+            .settings_panel_visible
+            .swap(show_settings, Ordering::AcqRel);
+        if show_settings && !was_showing_settings {
+            self.refresh_backup_count();
+        }
         sync_settings_panel(
             &mut ui.root,
             self.settings.snapshot(),
             show_settings,
-            self.import_notice.current_and_tick(),
+            self.status_notice.current_and_tick(),
+            self.backup_count.load(Ordering::Acquire),
         );
         if show_settings && settings_mouse_pressed {
             self.handle_settings_mouse_click(ui);
@@ -192,26 +227,67 @@ impl IntroSkipExtension {
         ] {
             if node_contains_point(&ui.root, id, ui_x, ui_y) {
                 key.store(&self.settings, value);
-                save_runtime_settings(&self.settings);
+                let status = if save_runtime_settings(&self.settings).is_ok() {
+                    STATUS_SAVED
+                } else {
+                    STATUS_FAILURE
+                };
+                self.status_notice.show(status);
                 return;
             }
         }
 
-        if node_contains_point(&ui.root, IMPORT_BACKUP_ID, ui_x, ui_y) {
-            match import_latest_backup() {
+        for (selected_id, unselected_id, days) in [
+            (RETENTION_3_ON_ID, RETENTION_3_OFF_ID, 3),
+            (RETENTION_7_ON_ID, RETENTION_7_OFF_ID, 7),
+            (RETENTION_14_ON_ID, RETENTION_14_OFF_ID, 14),
+            (RETENTION_30_ON_ID, RETENTION_30_OFF_ID, 30),
+        ] {
+            if node_contains_point(&ui.root, selected_id, ui_x, ui_y)
+                || node_contains_point(&ui.root, unselected_id, ui_x, ui_y)
+            {
+                self.settings
+                    .backup_retention_days
+                    .store(days, Ordering::Release);
+                let saved = save_runtime_settings(&self.settings).is_ok();
+                let cleaned = cleanup_expired_backups(days).is_ok();
+                self.refresh_backup_count();
+                self.status_notice.show(if saved && cleaned {
+                    STATUS_RETENTION
+                } else {
+                    STATUS_FAILURE
+                });
+                return;
+            }
+        }
+
+        for (index, id) in BACKUP_BUTTON_IDS.iter().enumerate() {
+            if !node_contains_point(&ui.root, id, ui_x, ui_y) {
+                continue;
+            }
+            match import_backup(index) {
                 Ok(path) => {
                     record_backup_status(&format!(
-                        "Imported latest backup into the Load menu: {}",
+                        "Imported backup {} into the Load menu: {}",
+                        index + 1,
                         path.display()
                     ));
-                    self.import_notice.show(IMPORT_NOTICE_SUCCESS);
+                    self.status_notice.show(STATUS_IMPORT_SUCCESS);
                 }
                 Err(error) => {
                     record_backup_status(&format!("Backup import failed: {error}"));
-                    self.import_notice.show(IMPORT_NOTICE_FAILURE);
+                    self.status_notice.show(STATUS_FAILURE);
                 }
             }
+            return;
         }
+    }
+
+    fn refresh_backup_count(&self) {
+        let count = backup_dir()
+            .and_then(|directory| recent_backups(&directory, BACKUP_BUTTON_IDS.len()).ok())
+            .map_or(0, |backups| backups.len() as u8);
+        self.backup_count.store(count, Ordering::Release);
     }
 
     fn try_auto_continue(&self, ui: &GameUI) {
@@ -254,7 +330,7 @@ impl IntroSkipExtension {
         if !self.mismatch_backup_ready.load(Ordering::Acquire)
             && !self.mismatch_backup_failed.load(Ordering::Acquire)
         {
-            match backup_latest_save() {
+            match backup_latest_save(self.settings.backup_retention_days.load(Ordering::Acquire)) {
                 Ok(path) => {
                     record_backup_status(&format!("Backup ready: {}", path.display()));
                     self.mismatch_backup_ready.store(true, Ordering::Release);
@@ -294,8 +370,21 @@ fn find_node<'a>(node: &'a Node, id: &str) -> Option<&'a Node> {
     node.child.iter().find_map(|child| find_node(child, id))
 }
 
+fn find_visible_node<'a>(node: &'a Node, id: &str, ancestors_visible: bool) -> Option<&'a Node> {
+    let visible = ancestors_visible && node.visible;
+    if node.id == id {
+        return visible.then_some(node);
+    }
+    if !visible {
+        return None;
+    }
+    node.child
+        .iter()
+        .find_map(|child| find_visible_node(child, id, visible))
+}
+
 fn node_is_visible(node: &Node, id: &str) -> bool {
-    (node.id == id && node.visible) || node.child.iter().any(|child| node_is_visible(child, id))
+    find_visible_node(node, id, true).is_some()
 }
 
 fn set_node_visible(node: &mut Node, id: &str, visible: bool) -> bool {
@@ -309,11 +398,10 @@ fn set_node_visible(node: &mut Node, id: &str, visible: bool) -> bool {
 }
 
 fn node_contains_point(root: &Node, id: &str, x: f32, y: f32) -> bool {
-    let Some(node) = find_node(root, id) else {
+    let Some(node) = find_visible_node(root, id, true) else {
         return false;
     };
-    node.visible
-        && node.rect.w > 0.0
+    node.rect.w > 0.0
         && node.rect.h > 0.0
         && x >= node.rect.x
         && x <= node.rect.x + node.rect.w
@@ -328,8 +416,8 @@ fn selected_mod_is_intro_skip(root: &Node, assets: &Assets) -> bool {
     if name_node.runner.type_name() != "engine_ui::runner::label::LabelRunner" {
         return false;
     }
-    // NodeRunner does not expose a safe downcast helper in the 0.5.0 SDK.
-    // The exact type-name guard keeps this cast limited to the known label runner.
+    // The SDK's Any downcast does not preserve the runner's concrete identity
+    // across the game/mod boundary. Guard the cast with the SDK type name.
     let label =
         unsafe { &*(name_node.runner.as_ref() as *const dyn NodeRunner as *const LabelRunner) };
     label
@@ -341,27 +429,44 @@ fn sync_settings_panel(
     root: &mut Node,
     settings: Settings,
     show_settings: bool,
-    import_status: u8,
+    status: u8,
+    backup_count: u8,
 ) {
     set_node_visible(root, "description_panel", !show_settings);
     set_node_visible(root, SETTINGS_PANEL_ID, show_settings);
+    set_node_visible(root, "intro_skip_header_version", show_settings);
+    set_node_visible(root, "intro_skip_header_dependencies", show_settings);
+    set_node_visible(root, "deps_panel", !show_settings);
+    set_node_visible(root, "version_panel", !show_settings);
     set_node_visible(root, DISCLAIMER_ON_ID, settings.skip_disclaimer);
     set_node_visible(root, DISCLAIMER_OFF_ID, !settings.skip_disclaimer);
     set_node_visible(root, CONTINUE_ON_ID, settings.auto_continue);
     set_node_visible(root, CONTINUE_OFF_ID, !settings.auto_continue);
     set_node_visible(root, FORCE_ON_ID, settings.auto_load_anyway);
     set_node_visible(root, FORCE_OFF_ID, !settings.auto_load_anyway);
-    set_node_visible(root, IMPORT_DEFAULT_ID, import_status == IMPORT_NOTICE_NONE);
+    for (selected_id, unselected_id, days) in [
+        (RETENTION_3_ON_ID, RETENTION_3_OFF_ID, 3),
+        (RETENTION_7_ON_ID, RETENTION_7_OFF_ID, 7),
+        (RETENTION_14_ON_ID, RETENTION_14_OFF_ID, 14),
+        (RETENTION_30_ON_ID, RETENTION_30_OFF_ID, 30),
+    ] {
+        let selected = settings.backup_retention_days == days;
+        set_node_visible(root, selected_id, selected);
+        set_node_visible(root, unselected_id, !selected);
+    }
+    for (index, id) in BACKUP_BUTTON_IDS.iter().enumerate() {
+        set_node_visible(root, id, index < backup_count as usize);
+    }
+    set_node_visible(root, BACKUP_EMPTY_ID, backup_count == 0);
+    set_node_visible(root, STATUS_READY_ID, status == STATUS_READY);
+    set_node_visible(root, STATUS_SAVED_ID, status == STATUS_SAVED);
+    set_node_visible(root, STATUS_RETENTION_ID, status == STATUS_RETENTION);
     set_node_visible(
         root,
-        IMPORT_SUCCESS_ID,
-        import_status == IMPORT_NOTICE_SUCCESS,
+        STATUS_IMPORT_SUCCESS_ID,
+        status == STATUS_IMPORT_SUCCESS,
     );
-    set_node_visible(
-        root,
-        IMPORT_FAILURE_ID,
-        import_status == IMPORT_NOTICE_FAILURE,
-    );
+    set_node_visible(root, STATUS_FAILURE_ID, status == STATUS_FAILURE);
 }
 
 fn game_data_dir() -> Option<PathBuf> {
@@ -398,6 +503,28 @@ fn latest_save_in(directory: &std::path::Path) -> Result<PathBuf, String> {
         .ok_or_else(|| format!("no save_*.data file found in {}", directory.display()))
 }
 
+fn recent_backups(directory: &std::path::Path, limit: usize) -> Result<Vec<PathBuf>, String> {
+    let entries = fs::read_dir(directory)
+        .map_err(|error| format!("cannot read {}: {error}", directory.display()))?;
+    let mut backups: Vec<_> = entries
+        .filter_map(Result::ok)
+        .filter_map(|entry| {
+            let path = entry.path();
+            if !is_managed_backup(&path) {
+                return None;
+            }
+            let modified = entry.metadata().ok()?.modified().unwrap_or(UNIX_EPOCH);
+            Some((modified, path))
+        })
+        .collect();
+    backups.sort_unstable_by_key(|(modified, _)| std::cmp::Reverse(*modified));
+    Ok(backups
+        .into_iter()
+        .take(limit)
+        .map(|(_, path)| path)
+        .collect())
+}
+
 fn latest_matching_backup(directory: &std::path::Path, source_stem: &str) -> Option<PathBuf> {
     let prefix = format!("{source_stem}__before_mod_load_");
     fs::read_dir(directory)
@@ -428,8 +555,9 @@ fn is_managed_backup(path: &std::path::Path) -> bool {
         && path.extension().and_then(|extension| extension.to_str()) == Some("data")
 }
 
-fn prune_expired_backups(directory: &std::path::Path) -> Result<usize, String> {
+fn prune_expired_backups(directory: &std::path::Path, retention_days: u8) -> Result<usize, String> {
     let now = SystemTime::now();
+    let retention = Duration::from_secs(u64::from(retention_days) * 24 * 60 * 60);
     let entries = fs::read_dir(directory)
         .map_err(|error| format!("cannot read {}: {error}", directory.display()))?;
     let mut removed = 0;
@@ -449,7 +577,7 @@ fn prune_expired_backups(directory: &std::path::Path) -> Result<usize, String> {
         let Ok(age) = now.duration_since(created) else {
             continue;
         };
-        if age <= BACKUP_RETENTION {
+        if age <= retention {
             continue;
         }
         fs::remove_file(&path)
@@ -459,31 +587,35 @@ fn prune_expired_backups(directory: &std::path::Path) -> Result<usize, String> {
     Ok(removed)
 }
 
-fn cleanup_expired_backups() {
+fn cleanup_expired_backups(retention_days: u8) -> Result<usize, String> {
     let Some(backups) = backup_dir() else {
-        return;
+        return Err("APPDATA is unavailable".to_string());
     };
     if !backups.exists() {
-        return;
+        return Ok(0);
     }
-    match prune_expired_backups(&backups) {
-        Ok(removed) if removed > 0 => {
-            record_backup_status(&format!("Removed {removed} backup(s) older than 7 days"));
+    let result = prune_expired_backups(&backups, retention_days);
+    match &result {
+        Ok(removed) if *removed > 0 => {
+            record_backup_status(&format!(
+                "Removed {removed} backup(s) older than {retention_days} days"
+            ));
         }
         Err(error) => {
             record_backup_status(&format!("Backup retention cleanup warning: {error}"));
         }
         _ => {}
     }
+    result
 }
 
-fn backup_latest_save() -> Result<PathBuf, String> {
+fn backup_latest_save(retention_days: u8) -> Result<PathBuf, String> {
     let data_dir = game_data_dir().ok_or("APPDATA is unavailable")?;
     let source = latest_save_in(&data_dir)?;
     let backups = backup_dir().ok_or("APPDATA is unavailable")?;
     fs::create_dir_all(&backups)
         .map_err(|error| format!("cannot create {}: {error}", backups.display()))?;
-    cleanup_expired_backups();
+    let _ = cleanup_expired_backups(retention_days);
 
     let source_metadata = fs::metadata(&source)
         .map_err(|error| format!("cannot inspect {}: {error}", source.display()))?;
@@ -512,9 +644,12 @@ fn backup_latest_save() -> Result<PathBuf, String> {
     Ok(target)
 }
 
-fn import_latest_backup() -> Result<PathBuf, String> {
+fn import_backup(index: usize) -> Result<PathBuf, String> {
     let backups = backup_dir().ok_or("APPDATA is unavailable")?;
-    let source = latest_save_in(&backups)?;
+    let source = recent_backups(&backups, BACKUP_BUTTON_IDS.len())?
+        .into_iter()
+        .nth(index)
+        .ok_or_else(|| format!("backup {} is no longer available", index + 1))?;
     let data_dir = game_data_dir().ok_or("APPDATA is unavailable")?;
     let target = data_dir.join(format!("save_{}.data", local_timestamp()));
     if target.exists() {
@@ -646,7 +781,7 @@ fn load_settings() -> Settings {
         return settings;
     };
 
-    let (source, should_persist) = match fs::read_to_string(&path) {
+    let (source, mut should_persist) = match fs::read_to_string(&path) {
         Ok(source) => (source, false),
         Err(_) => match legacy_settings_path().and_then(|path| fs::read_to_string(path).ok()) {
             Some(source) => (source, true),
@@ -663,6 +798,12 @@ fn load_settings() -> Settings {
         read_json_bool(&source, "auto_continue").unwrap_or(settings.auto_continue);
     settings.auto_load_anyway =
         read_json_bool(&source, "auto_load_anyway").unwrap_or(settings.auto_load_anyway);
+    match read_json_u8(&source, "backup_retention_days")
+        .filter(|days| matches!(days, 3 | 7 | 14 | 30))
+    {
+        Some(days) => settings.backup_retention_days = days,
+        None => should_persist = true,
+    }
 
     if should_persist {
         if let Err(error) = write_settings(settings) {
@@ -680,17 +821,21 @@ fn write_settings(settings: Settings) -> Result<(), String> {
     fs::create_dir_all(directory)
         .map_err(|error| format!("cannot create {}: {error}", directory.display()))?;
     let source = format!(
-        "{{\n  \"skip_disclaimer\": {},\n  \"auto_continue\": {},\n  \"auto_load_anyway\": {}\n}}\n",
-        settings.skip_disclaimer, settings.auto_continue, settings.auto_load_anyway
+        "{{\n  \"skip_disclaimer\": {},\n  \"auto_continue\": {},\n  \"auto_load_anyway\": {},\n  \"backup_retention_days\": {}\n}}\n",
+        settings.skip_disclaimer,
+        settings.auto_continue,
+        settings.auto_load_anyway,
+        settings.backup_retention_days
     );
     fs::write(&path, source).map_err(|error| format!("cannot write {}: {error}", path.display()))
 }
 
-fn save_runtime_settings(settings: &RuntimeSettings) {
-    if let Err(error) = write_settings(settings.snapshot()) {
+fn save_runtime_settings(settings: &RuntimeSettings) -> Result<(), String> {
+    write_settings(settings.snapshot()).map_err(|error| {
         record_runtime_status(&format!("settings_save_failed error={error}"));
         eprintln!("intro_skip: failed to save settings: {error}");
-    }
+        error
+    })
 }
 
 fn read_json_bool(source: &str, key: &str) -> Option<bool> {
@@ -703,6 +848,13 @@ fn read_json_bool(source: &str, key: &str) -> Option<bool> {
     } else {
         None
     }
+}
+
+fn read_json_u8(source: &str, key: &str) -> Option<u8> {
+    let key = format!("\"{key}\"");
+    let value = source.split_once(&key)?.1.split_once(':')?.1.trim_start();
+    let digits: String = value.chars().take_while(char::is_ascii_digit).collect();
+    digits.parse().ok()
 }
 
 #[repr(C)]
@@ -866,7 +1018,9 @@ fn init(_ctx: &GameCtx) -> ModRegistration {
     let mut registration = ModRegistration::new(MOD_ID);
     registration.set_extension(IntroSkipExtension {
         settings,
-        import_notice: Arc::new(ImportNotice::new()),
+        status_notice: Arc::new(StatusNotice::new()),
+        backup_count: AtomicU8::new(0),
+        settings_panel_visible: AtomicBool::new(false),
         title_ready_frames: AtomicUsize::new(0),
         auto_continue_sent: AtomicBool::new(false),
         mismatch_ready_frames: AtomicUsize::new(0),

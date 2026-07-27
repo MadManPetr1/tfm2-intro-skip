@@ -10,6 +10,9 @@ $root = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 
 if (-not $SkipBuild) {
     & (Join-Path $root "build_local.ps1") -SdkDir $SdkDir
+    if ($LASTEXITCODE -ne 0) {
+        throw "Release build failed with exit code $LASTEXITCODE."
+    }
 }
 
 $dll = Join-Path $root "intro_skip.dll"

@@ -6,6 +6,18 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-07-27
+
+### Added
+
+- Configurable backup retention with 3, 7, 14, and 30 day choices.
+- A selectable newest-first list of the five most recent verified backups.
+- Visible status feedback for settings, retention cleanup, imports, and failures.
+
+### Changed
+
+- Moved Intro Skip's version and base dependency range into the top identity card and removed the redundant bottom cards from its settings view.
+
 ## [0.4.2] - 2026-07-27
 
 ### Changed
@@ -38,6 +50,7 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 - Automatic Load Anyway is blocked unless the latest save has been copied and byte-verified.
 - Recovery import always creates a separate save and remains a manual action.
 
-[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.2...HEAD
+[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.3...HEAD
+[0.4.3]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/MadManPetr1/tfm2-intro-skip/tree/v0.4.1

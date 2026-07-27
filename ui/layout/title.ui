@@ -715,7 +715,7 @@ body:color {
             @"asset/base/style/main#label";
             x: 16px;
             y: 76px;
-            width: 534px;
+            width: 210px;
             height: 24px;
 
             align_x: Left;
@@ -724,13 +724,43 @@ body:color {
 
             text: "-";
           }
+
+          #intro_skip_header_version:label {
+            @"asset/base/style/main#bold_label";
+            x: 350px;
+            y: 48px;
+            width: 200px;
+            height: 24px;
+            visible: false;
+
+            align_x: Right;
+            align_y: Center;
+            size: 15;
+            color: #ecfbf8ff;
+            text: "Version 0.4.3";
+          }
+
+          #intro_skip_header_dependencies:label {
+            @"asset/base/style/main#label";
+            x: 220px;
+            y: 76px;
+            width: 330px;
+            height: 24px;
+            visible: false;
+
+            align_x: Right;
+            align_y: Center;
+            size: 14;
+            color: #a3a9b6ff;
+            text: "Requires base >=0.5.0, <0.5.1";
+          }
         }
       }
 
       #description_panel:color {
         y: 134px;
         width: 700px;
-        height: 440px;
+        height: 568px;
 
         color: #252738ff;
 
@@ -826,15 +856,28 @@ body:color {
           text: "Choose what happens after launch. Changes save immediately.";
         }
 
+        #intro_skip_disclaimer_label:label {
+          @"asset/base/style/main#bold_label";
+          x: 20px;
+          y: 68px;
+          width: 460px;
+          height: 34px;
+
+          align_x: Left;
+          align_y: Center;
+          size: 16;
+          text: "Skip startup disclaimer";
+        }
+
         #intro_skip_disclaimer_on:color_icon_button {
           @"asset/base/style/main#primary_button";
-          x: 20px;
-          y: 76px;
-          width: 660px;
-          height: 52px;
+          x: 500px;
+          y: 68px;
+          width: 180px;
+          height: 34px;
 
           text: {
-            text: "Skip startup disclaimer: ON";
+            text: "ON";
             font: "asset/base/font/set/bold";
             size: 16;
             align_x: Center;
@@ -844,14 +887,14 @@ body:color {
 
         #intro_skip_disclaimer_off:color_icon_button {
           @"asset/base/style/main#tertiary_button";
-          x: 20px;
-          y: 76px;
-          width: 660px;
-          height: 52px;
+          x: 500px;
+          y: 68px;
+          width: 180px;
+          height: 34px;
           visible: false;
 
           text: {
-            text: "Skip startup disclaimer: OFF";
+            text: "OFF";
             font: "asset/base/font/set/bold";
             size: 16;
             align_x: Center;
@@ -859,16 +902,29 @@ body:color {
           }
         }
 
+        #intro_skip_continue_label:label {
+          @"asset/base/style/main#bold_label";
+          x: 20px;
+          y: 108px;
+          width: 460px;
+          height: 34px;
+
+          align_x: Left;
+          align_y: Center;
+          size: 16;
+          text: "Automatically select Continue";
+        }
+
         #intro_skip_continue_on:color_icon_button {
           @"asset/base/style/main#primary_button";
-          x: 20px;
-          y: 140px;
-          width: 660px;
-          height: 52px;
+          x: 500px;
+          y: 108px;
+          width: 180px;
+          height: 34px;
           visible: false;
 
           text: {
-            text: "Automatically select Continue: ON";
+            text: "ON";
             font: "asset/base/font/set/bold";
             size: 16;
             align_x: Center;
@@ -878,13 +934,13 @@ body:color {
 
         #intro_skip_continue_off:color_icon_button {
           @"asset/base/style/main#tertiary_button";
-          x: 20px;
-          y: 140px;
-          width: 660px;
-          height: 52px;
+          x: 500px;
+          y: 108px;
+          width: 180px;
+          height: 34px;
 
           text: {
-            text: "Automatically select Continue: OFF";
+            text: "OFF";
             font: "asset/base/font/set/bold";
             size: 16;
             align_x: Center;
@@ -892,16 +948,29 @@ body:color {
           }
         }
 
+        #intro_skip_force_label:label {
+          @"asset/base/style/main#bold_label";
+          x: 20px;
+          y: 148px;
+          width: 460px;
+          height: 34px;
+
+          align_x: Left;
+          align_y: Center;
+          size: 16;
+          text: "Load Anyway after a verified backup";
+        }
+
         #intro_skip_force_on:color_icon_button {
           @"asset/base/style/main#primary_button";
-          x: 20px;
-          y: 204px;
-          width: 660px;
-          height: 52px;
+          x: 500px;
+          y: 148px;
+          width: 180px;
+          height: 34px;
           visible: false;
 
           text: {
-            text: "Automatically Load Anyway on mismatch: ON";
+            text: "ON";
             font: "asset/base/font/set/bold";
             size: 16;
             align_x: Center;
@@ -911,13 +980,13 @@ body:color {
 
         #intro_skip_force_off:color_icon_button {
           @"asset/base/style/main#tertiary_button";
-          x: 20px;
-          y: 204px;
-          width: 660px;
-          height: 52px;
+          x: 500px;
+          y: 148px;
+          width: 180px;
+          height: 34px;
 
           text: {
-            text: "Automatically Load Anyway on mismatch: OFF";
+            text: "OFF";
             font: "asset/base/font/set/bold";
             size: 16;
             align_x: Center;
@@ -925,26 +994,281 @@ body:color {
           }
         }
 
-        #intro_skip_import_backup:color_icon_button {
-          @"asset/base/style/main#secondary_button";
+        #intro_skip_recovery_title:label {
+          @"asset/base/style/main#bold_label";
           x: 20px;
-          y: 284px;
+          y: 204px;
           width: 660px;
-          height: 52px;
+          height: 24px;
+
+          align_x: Left;
+          align_y: Center;
+          size: 17;
+          text: "Backup and recovery";
+        }
+
+        #intro_skip_retention_label:label {
+          @"asset/base/style/main#bold_label";
+          x: 20px;
+          y: 232px;
+          width: 250px;
+          height: 36px;
+
+          align_x: Left;
+          align_y: Center;
+          size: 15;
+          text: "Keep automatic backups";
+        }
+
+        #intro_skip_retention_3_on:color_icon_button {
+          @"asset/base/style/main#primary_button";
+          x: 280px;
+          y: 232px;
+          width: 92px;
+          height: 36px;
+          visible: false;
 
           text: {
-            text: "Import latest automatic backup into Load menu";
+            text: "3 days";
             font: "asset/base/font/set/bold";
-            size: 15;
+            size: 14;
             align_x: Center;
             align_y: Center;
           }
         }
 
-        #intro_skip_import_default:label {
+        #intro_skip_retention_3_off:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 280px;
+          y: 232px;
+          width: 92px;
+          height: 36px;
+
+          text: {
+            text: "3 days";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_retention_7_on:color_icon_button {
+          @"asset/base/style/main#primary_button";
+          x: 382px;
+          y: 232px;
+          width: 92px;
+          height: 36px;
+
+          text: {
+            text: "7 days";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_retention_7_off:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 382px;
+          y: 232px;
+          width: 92px;
+          height: 36px;
+          visible: false;
+
+          text: {
+            text: "7 days";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_retention_14_on:color_icon_button {
+          @"asset/base/style/main#primary_button";
+          x: 484px;
+          y: 232px;
+          width: 92px;
+          height: 36px;
+          visible: false;
+
+          text: {
+            text: "14 days";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_retention_14_off:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 484px;
+          y: 232px;
+          width: 92px;
+          height: 36px;
+
+          text: {
+            text: "14 days";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_retention_30_on:color_icon_button {
+          @"asset/base/style/main#primary_button";
+          x: 586px;
+          y: 232px;
+          width: 94px;
+          height: 36px;
+          visible: false;
+
+          text: {
+            text: "30 days";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_retention_30_off:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 586px;
+          y: 232px;
+          width: 94px;
+          height: 36px;
+
+          text: {
+            text: "30 days";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_backups_label:label {
           @"asset/base/style/main#label";
           x: 20px;
-          y: 352px;
+          y: 276px;
+          width: 660px;
+          height: 20px;
+
+          align_x: Left;
+          align_y: Center;
+          size: 14;
+          color: #a3a9b6ff;
+          text: "Recent verified backups • Select one to import into the Load menu";
+        }
+
+        #intro_skip_backup_empty:label {
+          @"asset/base/style/main#label";
+          x: 20px;
+          y: 304px;
+          width: 660px;
+          height: 206px;
+
+          align_x: Center;
+          align_y: Center;
+          size: 15;
+          color: #a3a9b6ff;
+          text: "No automatic backups are available yet.";
+        }
+
+        #intro_skip_backup_1:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 20px;
+          y: 304px;
+          width: 660px;
+          height: 36px;
+          visible: false;
+
+          text: {
+            text: "1  •  Newest verified backup";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Left;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_backup_2:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 20px;
+          y: 344px;
+          width: 660px;
+          height: 36px;
+          visible: false;
+
+          text: {
+            text: "2  •  Previous verified backup";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Left;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_backup_3:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 20px;
+          y: 384px;
+          width: 660px;
+          height: 36px;
+          visible: false;
+
+          text: {
+            text: "3  •  Third newest verified backup";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Left;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_backup_4:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 20px;
+          y: 424px;
+          width: 660px;
+          height: 36px;
+          visible: false;
+
+          text: {
+            text: "4  •  Fourth newest verified backup";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Left;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_backup_5:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 20px;
+          y: 464px;
+          width: 660px;
+          height: 36px;
+          visible: false;
+
+          text: {
+            text: "5  •  Fifth newest verified backup";
+            font: "asset/base/font/set/bold";
+            size: 14;
+            align_x: Left;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_status_ready:label {
+          @"asset/base/style/main#label";
+          x: 20px;
+          y: 514px;
           width: 660px;
           height: 24px;
 
@@ -952,13 +1276,13 @@ body:color {
           align_y: Center;
           size: 14;
           color: #c2c6ceff;
-          text: "Backups are retained for 7 days • Recovery always stays manual";
+          text: "Ready • Recovery imports always remain manual";
         }
 
-        #intro_skip_import_success:label {
+        #intro_skip_status_saved:label {
           @"asset/base/style/main#bold_label";
           x: 20px;
-          y: 352px;
+          y: 514px;
           width: 660px;
           height: 24px;
           visible: false;
@@ -967,13 +1291,43 @@ body:color {
           align_y: Center;
           size: 14;
           color: #37d5b3ff;
-          text: "Backup imported successfully • Open Load to select it";
+          text: "Settings saved";
         }
 
-        #intro_skip_import_failure:label {
+        #intro_skip_status_retention:label {
           @"asset/base/style/main#bold_label";
           x: 20px;
-          y: 352px;
+          y: 514px;
+          width: 660px;
+          height: 24px;
+          visible: false;
+
+          align_x: Center;
+          align_y: Center;
+          size: 14;
+          color: #37d5b3ff;
+          text: "Retention updated • Expired backups cleaned";
+        }
+
+        #intro_skip_status_import_success:label {
+          @"asset/base/style/main#bold_label";
+          x: 20px;
+          y: 514px;
+          width: 660px;
+          height: 24px;
+          visible: false;
+
+          align_x: Center;
+          align_y: Center;
+          size: 14;
+          color: #37d5b3ff;
+          text: "Backup imported • Open Load to select it";
+        }
+
+        #intro_skip_status_failure:label {
+          @"asset/base/style/main#bold_label";
+          x: 20px;
+          y: 514px;
           width: 660px;
           height: 24px;
           visible: false;
@@ -982,7 +1336,7 @@ body:color {
           align_y: Center;
           size: 14;
           color: #ffae4aff;
-          text: "Import failed • Details written to backup_status.log";
+          text: "Action failed • Details written to the Intro Skip status log";
         }
       }
 

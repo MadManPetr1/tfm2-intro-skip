@@ -62,25 +62,25 @@ If automatic Load Anyway is enabled, Intro Skip first copies the latest career s
 
 COMPATIBILITY
 
-Intro Skip 0.4.2 is built for Teamfight Manager 2 0.5.0. Compatibility with newer game versions is not yet verified.
+Intro Skip 0.4.3 is built for Teamfight Manager 2 0.5.0. Compatibility with newer game versions is not yet verified.
 
 RECOVERY
 
-Automatic backups are retained for 7 days. Select Intro Skip in the Mods screen and choose “Import latest automatic backup into Load menu” to create a separate recovery save. Recovery is never loaded automatically.
+Automatic backups are retained for 3, 7, 14, or 30 days. Select one of the five latest verified backups in the Mods screen to create a separate recovery save. Recovery is never loaded automatically.
 
 This is an independent community mod and is not affiliated with or endorsed by Team Samoyed.
 
-## GitHub v0.4.2 release
+## GitHub v0.4.3 release
 
 **Release title**
 
-Intro Skip v0.4.2 — Settings Reliability Fix
+Intro Skip v0.4.3 — Configurable Recovery
 
 **Release notes**
 
 Intro Skip provides safe, configurable startup automation for Teamfight Manager 2 0.5.0.
 
-Version 0.4.2 fixes the in-game configuration controls not responding in Teamfight Manager 2 0.5.0. It also keeps automatic Continue off if the settings file is unavailable, matching the published safe default.
+Version 0.4.3 adds configurable backup retention, a selectable list of the five latest verified backups, visible action status, and a cleaner Mods-screen layout.
 
 Highlights:
 
@@ -88,13 +88,13 @@ Highlights:
 - optionally select Continue;
 - optionally accept a mod-state mismatch;
 - create and byte-verify a backup before automatic Load Anyway;
-- retain managed backups for seven days;
-- import the latest backup into the normal Load menu manually;
+- retain managed backups for 3, 7, 14, or 30 days;
+- import any of the five latest verified backups into the normal Load menu manually;
 - configure all behavior from the in-game Mods screen.
 
 Only disclaimer skipping is enabled by default. Automatic Continue and Load Anyway remain opt-in.
 
-Install `intro-skip-v0.4.2.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
+Install `intro-skip-v0.4.3.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
 
 ## Launch post
 

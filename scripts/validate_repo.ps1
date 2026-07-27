@@ -93,6 +93,9 @@ foreach ($setting in "skip_disclaimer", "auto_continue", "auto_load_anyway") {
         throw "settings.json must contain a Boolean '$setting' value."
     }
 }
+if ($settings.backup_retention_days -notin @(3, 7, 14, 30)) {
+    throw "settings.json backup_retention_days must be 3, 7, 14, or 30."
+}
 
 if ($override.PSObject.Properties.Name -notcontains "asset/base/ui/layout/title") {
     throw "mod.override_info does not remap the title layout."
@@ -104,6 +107,12 @@ if ($source -notmatch 'const MOD_ID: &str = "intro_skip";') {
 }
 if ($source -notmatch 'const MOD_NAME: &str = "Intro Skip";') {
     throw 'The Rust MOD_NAME must match mod.mod_info.'
+}
+
+$titleLayout = Get-Content -LiteralPath (Join-Path $root "ui/layout/title.ui") -Raw
+$headerVersion = [regex]::Escape("text: `"Version $($modInfo.version)`";")
+if ($titleLayout -notmatch $headerVersion) {
+    throw "The Intro Skip header version must match mod.mod_info."
 }
 
 Push-Location $root

@@ -1,5 +1,6 @@
 {
   "skip_disclaimer": true,
   "auto_continue": false,
-  "auto_load_anyway": false
+  "auto_load_anyway": false,
+  "backup_retention_days": 7
 }

@@ -11,7 +11,7 @@ Safe, configurable startup automation for **Teamfight Manager 2**.
 </div>
 
 > [!IMPORTANT]
-> Version **0.4.2** is built for Teamfight Manager 2 **0.5.0 only**. Compatibility with newer game versions has not yet been verified.
+> Version **0.4.3** is built for Teamfight Manager 2 **0.5.0 only**. Compatibility with newer game versions has not yet been verified.
 
 ## Features
 
@@ -20,7 +20,7 @@ Safe, configurable startup automation for **Teamfight Manager 2**.
 - Optionally accepts the mod-state mismatch prompt.
 - Creates and byte-verifies a save backup before automatic **Load Anyway**.
 - Stops the automatic mismatch flow if backup creation or verification fails.
-- Retains managed backups for seven days.
+- Retains managed backups for a configurable 3, 7, 14, or 30 days.
 - Keeps recovery manual: a backup is imported into the regular **Load** menu only when you request it.
 - Provides all settings directly inside the game's Mods screen.
 
@@ -29,6 +29,7 @@ Safe, configurable startup automation for **Teamfight Manager 2**.
 | Skip disclaimer | On |
 | Automatically select Continue | Off |
 | Automatically Load Anyway on mod mismatch | Off |
+| Backup retention | 7 days |
 
 ## Installation
 
@@ -61,7 +62,9 @@ Open **Mods**, select **Intro Skip**, and use the settings panel:
 - **Skip disclaimer** controls only the startup disclaimer.
 - **Automatically select Continue** loads the most recent career after the title UI becomes ready.
 - **Automatically Load Anyway on mod mismatch** is deliberately off by default. When enabled, it proceeds only after a verified backup exists.
-- **Import latest automatic backup into Load menu** creates a separate recovery save that you can select manually.
+- **Backup retention** keeps managed backups for 3, 7, 14, or 30 days.
+- **Recent verified backups** lists up to five backups, newest first. Selecting one imports a separate recovery save into the regular Load menu.
+- **Visible status** confirms saved settings, retention cleanup, successful imports, and failures.
 
 Changes are written outside the Workshop-managed mod folder so updates cannot replace them:
 
@@ -88,7 +91,7 @@ Backups are stored in:
 %APPDATA%\TeamSamoyed\TeamfightManager2\data\intro_skip_backups
 ```
 
-Managed backups older than seven days are removed. Diagnostic messages are appended to:
+Managed backups older than the selected retention period are removed. Diagnostic messages are appended to:
 
 ```text
 %APPDATA%\TeamSamoyed\TeamfightManager2\data\intro_skip\backup_status.log
@@ -121,7 +124,7 @@ To validate and create a player-ready release archive:
 .\scripts\package_release.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk"
 ```
 
-The archive is written to `builds\intro-skip-v0.4.2.zip`.
+The archive is written to `builds\intro-skip-v0.4.3.zip`.
 
 ## Project layout
 
