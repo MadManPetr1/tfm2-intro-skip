@@ -1,0 +1,2366 @@
+body:color {
+  width: 100%;
+  height: 100%;
+
+  color: #0f101600;
+
+  #logo:image {
+    width: 608px;
+    height: 158px;
+
+    x: 1121px;
+    y: 152px;
+
+    source: "asset/base/sprite/logo";
+  }
+
+  #icon:image {
+    width: 12px;
+    height: 6px;
+
+    color: #4a4c56ff;
+    source: "asset/base/ui/icons/down_arrow";
+
+    x: 1425px;
+    y: 360px;
+
+    pivot_x: 0.5;
+    pivot_y: 0.5;
+  }
+
+  #line1:color {
+    width: 288px;
+    height: 1px;
+    x: 1121px;
+    y: 360px;
+
+    color: #4a4c56ff;
+  }
+
+  #line2:color {
+    width: 288px;
+    height: 1px;
+    x: 1441px;
+    y: 360px;
+
+    color: #4a4c56ff;
+  }
+
+  #buttons:empty {
+    width: 608px;
+    height: 540px;
+    x: 1121px;
+    y: 410px;
+
+    child_type: TopToBottom {
+      spacing: 20px;
+    }
+
+    #continue:bouncing_color_icon_button {
+      @"asset/base/style/main#secondary_button";
+      @"asset/base/style/effect#bouncing";
+      visible: false;
+
+      width: 608px;
+      height: 50px;
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.continue";
+      }
+    }
+
+    #load:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+      visible: false;
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.load";
+      }
+    }
+
+    #new_game:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.new_game";
+      }
+    }
+
+    #multiplayer:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.multiplayer";
+      }
+    }
+
+    #mods:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.mods";
+      }
+    }
+
+    #database_edit:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.database_edit";
+      }
+    }
+
+    #options:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.options";
+      }
+    }
+
+    #credit:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.credit";
+      }
+    }
+
+    #quit:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.quit";
+      }
+    }
+  }
+
+  #credits_screen:empty {
+    width: 100%;
+    height: 100%;
+    visible: false;
+
+    #playback_overlay:color {
+      x: 60px;
+      y: 60px;
+      width: 870px;
+      height: 960px;
+
+      color: #60708540;
+
+      rounding: Uniform {
+        rounding: 8;
+      }
+    }
+
+    #credits_scroll:scroll_view {
+      x: 110px;
+      y: 150px;
+      width: 770px;
+      height: 780px;
+
+      speed: 90;
+      bar_width: 0;
+
+      bar: {
+        source: "asset/base/sprite/white";
+        color: #37d5b3ff;
+        hover: {
+          color: #ecfbf8ff;
+        }
+      }
+
+      back: {
+        source: "asset/base/sprite/white";
+        color: #4a4c56ff;
+      }
+
+      #contents:empty {
+        width: 746px;
+        height: auto;
+
+        child_type: TopToBottom {
+          spacing: 0px;
+        }
+
+        #credits_text:label {
+          @"asset/base/style/main#label";
+
+          width: 746px;
+          height: 10000px;
+
+          size: 18;
+          line_height: 28;
+          color: #f4f7fbff;
+          outline: 2;
+          outline_color: #05070bcc;
+
+          align_x: Left;
+          align_y: Top;
+          fit_height: true;
+          ratio: 0;
+          text_sound: "asset/base/sound/sfx/text_typing";
+          text: "";
+        }
+      }
+    }
+
+    #back:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      x: 1121px;
+      y: 410px;
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.mp_back";
+      }
+    }
+  }
+
+  #multiplayer_buttons:empty {
+    width: 608px;
+    height: 470px;
+    x: 1121px;
+    y: 410px;
+    visible: false;
+
+    child_type: TopToBottom {
+      spacing: 20px;
+    }
+
+    #host_new:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.mp_host_new";
+      }
+    }
+
+    #host_saved:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.mp_host_saved";
+      }
+    }
+
+    #browse:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.mp_browse";
+      }
+    }
+
+    #server_test:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+      visible: false;
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.mp_server_test";
+      }
+    }
+
+    #client_test:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+      visible: false;
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.mp_client_test";
+      }
+    }
+
+    #back:bouncing_color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+      @"asset/base/style/effect#bouncing";
+
+      width: 608px;
+      height: 50px;
+
+      text: {
+        align_x: Center;
+        align_y: Center;
+        size: 18;
+        text: "#asset/base/text/ui?title.mp_back";
+      }
+    }
+  }
+
+  #host_saved_tooltip_hitbox:color {
+    x: 1121px;
+    y: 480px;
+    width: 608px;
+    height: 50px;
+    visible: false;
+    color: #00000000;
+  }
+
+  #host_saved_tooltip:color {
+    z: 101;
+    visible: false;
+    ignore_event: true;
+    height: 42px;
+    width: 550px;
+    back_color: #161721ff;
+    color: #4a4c56ff;
+    stroke: 1;
+    rounding: Uniform {
+      rounding: 8;
+    }
+    padding: {
+      left: 10px;
+      right: 10px;
+      top: 5px;
+      bottom: 5px;
+    }
+
+    #text:label {
+      @"asset/base/style/main#label";
+      z: 101;
+      size: 18;
+      text: "#asset/base/text/ui?title.mp_host_saved_empty_tooltip";
+      align_x: Center;
+      align_y: Center;
+    }
+  }
+
+  #version:label {
+    @"asset/base/style/main#label";
+
+    anchor_x: 1;
+    pivot_x: 1;
+    anchor_y: 1;
+    pivot_y: 1;
+    size: 18;
+
+    width: 300px;
+
+    align_x: Right;
+    align_y: Bottom;
+    text: "Version";
+
+    x: -60px;
+    y: -60px;
+  }
+
+  #discord:color_icon_button {
+    @"asset/base/style/main#tertiary_button";
+
+    anchor_x: 1;
+    pivot_x: 1;
+    anchor_y: 1;
+    pivot_y: 1;
+
+    width: 40px;
+    height: 40px;
+
+    x: -60px;
+    y: -100px;
+
+    icon: {
+      source: "asset/base/ui/icons/discord";
+      rect: {
+        x: 8;
+        y: 8;
+        w: 24;
+        h: 24;
+      }
+    }
+  }
+
+  #fade:color_icon_button {
+    width: 100%;
+    height: 100%;
+
+    btn: {
+      color: #60708540;
+    }
+
+    visible: false;
+  }
+
+  #mods_popup:color {
+    width: 1532px;
+    height: 886px;
+
+    anchor_x: 0.5;
+    pivot_x: 0.5;
+    anchor_y: 0.5;
+    pivot_y: 0.5;
+
+    visible: false;
+
+    color: #161721ff;
+
+    rounding: Uniform {
+      rounding: 12;
+    }
+
+    #header:empty {
+      width: 1532px;
+      height: 56px;
+
+      #title:label {
+        @"asset/base/style/main#bold_label";
+
+        width: 400px;
+        height: 56px;
+
+        size: 18;
+
+        align_y: Center;
+        text: "#asset/base/text/ui?mods.title";
+
+        x: 24px;
+      }
+
+      #cancel:button {
+        width: 16px;
+        height: 16px;
+
+        anchor_x: 1;
+        pivot_x: 1;
+
+        x: -24px;
+        y: 20px;
+
+        source: "asset/base/ui/icons/cross";
+
+        color: #c2c6ceff;
+
+        hover: {
+          color: #e8e8e8ff;
+        }
+
+        active: {
+          color: #e8e8e8ff;
+        }
+      }
+    }
+
+    #left_panel:empty {
+      x: 24px;
+      y: 68px;
+      width: 770px;
+      height: 702px;
+
+      #table:empty {
+        width: 770px;
+        height: 702px;
+
+        #table_header:empty {
+          width: 770px;
+          height: 56px;
+
+          #name:label {
+            @"asset/base/style/main#label";
+            width: 300px;
+            height: 56px;
+
+            x: 12px;
+
+            align_x: Left;
+            align_y: Center;
+            size: 16;
+
+            text: "#asset/base/text/ui?mods.header_name";
+          }
+
+          #author:label {
+            @"asset/base/style/main#label";
+            width: 220px;
+            height: 56px;
+
+            x: 312px;
+
+            align_x: Left;
+            align_y: Center;
+            size: 16;
+
+            text: "#asset/base/text/ui?mods.header_author";
+          }
+
+          #active:label {
+            @"asset/base/style/main#label";
+            width: 214px;
+            height: 56px;
+
+            x: 532px;
+
+            align_x: Left;
+            align_y: Center;
+            size: 16;
+
+            text: "#asset/base/text/ui?mods.header_active";
+          }
+        }
+
+        #contents:scroll_view {
+          width: 770px;
+          height: 646px;
+
+          y: 56px;
+
+          speed: 100;
+          bar_width: 4;
+
+          bar: {
+            source: "asset/base/sprite/white";
+            color: #37d5b3ff;
+            hover: {
+              color: #ecfbf8ff;
+            }
+          }
+
+          back: {
+            source: "asset/base/sprite/white";
+            color: #4a4c56ff;
+          }
+
+          #contents:empty {
+            x: 2px;
+            y: 8px;
+            width: 758px;
+            height: auto;
+
+            child_type: TopToBottom {
+              spacing: 8px;
+            }
+          }
+        }
+      }
+
+      #no_mods:label {
+        @"asset/base/style/main#label";
+        width: 770px;
+        height: 702px;
+
+        align_x: Center;
+        align_y: Center;
+        size: 16;
+
+        text: "#asset/base/text/ui?mods.no_mods";
+      }
+    }
+
+    #right_panel:empty {
+      x: 808px;
+      y: 68px;
+      width: 700px;
+      height: 702px;
+
+      #top:empty {
+        width: 700px;
+        height: 120px;
+
+        #thumbnail_panel:color {
+          width: 120px;
+          height: 120px;
+
+          color: #252738ff;
+
+          rounding: Uniform {
+            rounding: 8;
+          }
+
+          #thumbnail:image {
+            x: 10px;
+            y: 10px;
+            width: 100px;
+            height: 100px;
+
+            source: "";
+          }
+        }
+
+        #info_panel:color {
+          x: 134px;
+          width: 566px;
+          height: 120px;
+
+          color: #252738ff;
+
+          rounding: Uniform {
+            rounding: 8;
+          }
+
+          #mod_name:label {
+            @"asset/base/style/main#bold_label";
+            x: 16px;
+            y: 12px;
+            width: 534px;
+            height: 32px;
+
+            align_x: Left;
+            align_y: Center;
+            size: 24;
+
+            text: "-";
+          }
+
+          #mod_author:label {
+            @"asset/base/style/main#label";
+            x: 16px;
+            y: 48px;
+            width: 534px;
+            height: 24px;
+
+            align_x: Left;
+            align_y: Center;
+            size: 16;
+
+            text: "-";
+          }
+
+          #mod_date:label {
+            @"asset/base/style/main#label";
+            x: 16px;
+            y: 76px;
+            width: 534px;
+            height: 24px;
+
+            align_x: Left;
+            align_y: Center;
+            size: 16;
+
+            text: "-";
+          }
+        }
+      }
+
+      #description_panel:color {
+        y: 134px;
+        width: 700px;
+        height: 440px;
+
+        color: #252738ff;
+
+        rounding: Uniform {
+          rounding: 8;
+        }
+
+        #description_scroll:scroll_view {
+          x: 16px;
+          y: 16px;
+          width: 668px;
+          height: 408px;
+
+          speed: 80;
+          bar_width: 4;
+
+          bar: {
+            source: "asset/base/sprite/white";
+            color: #37d5b3ff;
+            hover: {
+              color: #ecfbf8ff;
+            }
+          }
+
+          back: {
+            source: "asset/base/sprite/white";
+            color: #4a4c56ff;
+          }
+
+          #contents:empty {
+            width: 652px;
+            height: auto;
+
+            child_type: TopToBottom {
+              spacing: 0px;
+            }
+
+            #description_text:label {
+              @"asset/base/style/main#label";
+              width: 652px;
+              height: 10000px;
+
+              align_x: Left;
+              align_y: Top;
+              size: 16;
+              line_height: 24;
+
+              fit_height: true;
+
+              text: "#asset/base/text/ui?mods.no_selection";
+            }
+          }
+        }
+      }
+
+      #intro_skip_settings:color {
+        y: 358px;
+        width: 700px;
+        height: 216px;
+        z: 10;
+        visible: false;
+
+        color: #252738ff;
+
+        rounding: Uniform {
+          rounding: 8;
+        }
+
+        #intro_skip_settings_title:label {
+          @"asset/base/style/main#bold_label";
+          x: 16px;
+          y: 8px;
+          width: 668px;
+          height: 24px;
+
+          align_x: Left;
+          align_y: Center;
+          size: 18;
+          text: "Intro Skip • Safe Startup";
+        }
+
+        #intro_skip_disclaimer_on:color_icon_button {
+          @"asset/base/style/main#primary_button";
+          x: 16px;
+          y: 36px;
+          width: 668px;
+          height: 36px;
+
+          text: {
+            text: "Skip disclaimer: ON";
+            font: "asset/base/font/set/bold";
+            size: 16;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_disclaimer_off:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 16px;
+          y: 36px;
+          width: 668px;
+          height: 36px;
+          visible: false;
+
+          text: {
+            text: "Skip disclaimer: OFF";
+            font: "asset/base/font/set/bold";
+            size: 16;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_continue_on:color_icon_button {
+          @"asset/base/style/main#primary_button";
+          x: 16px;
+          y: 76px;
+          width: 668px;
+          height: 36px;
+
+          text: {
+            text: "Automatically select Continue: ON";
+            font: "asset/base/font/set/bold";
+            size: 16;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_continue_off:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 16px;
+          y: 76px;
+          width: 668px;
+          height: 36px;
+          visible: false;
+
+          text: {
+            text: "Automatically select Continue: OFF";
+            font: "asset/base/font/set/bold";
+            size: 16;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_force_on:color_icon_button {
+          @"asset/base/style/main#primary_button";
+          x: 16px;
+          y: 116px;
+          width: 668px;
+          height: 36px;
+
+          text: {
+            text: "Automatically Load Anyway on mod mismatch: ON";
+            font: "asset/base/font/set/bold";
+            size: 16;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_force_off:color_icon_button {
+          @"asset/base/style/main#tertiary_button";
+          x: 16px;
+          y: 116px;
+          width: 668px;
+          height: 36px;
+          visible: false;
+
+          text: {
+            text: "Automatically Load Anyway on mod mismatch: OFF";
+            font: "asset/base/font/set/bold";
+            size: 16;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_import_backup:color_icon_button {
+          @"asset/base/style/main#secondary_button";
+          x: 16px;
+          y: 156px;
+          width: 668px;
+          height: 36px;
+
+          text: {
+            text: "Import latest automatic backup into Load menu";
+            font: "asset/base/font/set/bold";
+            size: 15;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+
+        #intro_skip_import_default:label {
+          @"asset/base/style/main#label";
+          x: 16px;
+          y: 194px;
+          width: 668px;
+          height: 18px;
+
+          align_x: Center;
+          align_y: Center;
+          size: 13;
+          color: #c2c6ceff;
+          text: "Backups retained for 7 days • Recovery import always remains manual";
+        }
+
+        #intro_skip_import_success:label {
+          @"asset/base/style/main#bold_label";
+          x: 16px;
+          y: 194px;
+          width: 668px;
+          height: 18px;
+          visible: false;
+
+          align_x: Center;
+          align_y: Center;
+          size: 13;
+          color: #37d5b3ff;
+          text: "Backup imported successfully • Open Load to select it";
+        }
+
+        #intro_skip_import_failure:label {
+          @"asset/base/style/main#bold_label";
+          x: 16px;
+          y: 194px;
+          width: 668px;
+          height: 18px;
+          visible: false;
+
+          align_x: Center;
+          align_y: Center;
+          size: 13;
+          color: #ffae4aff;
+          text: "Import failed • Details written to backup_status.log";
+        }
+      }
+
+      #deps_panel:color {
+        y: 588px;
+        width: 486px;
+        height: 114px;
+
+        color: #252738ff;
+
+        rounding: Uniform {
+          rounding: 8;
+        }
+
+        #deps_header:label {
+          @"asset/base/style/main#bold_label";
+          width: 486px;
+          height: 24px;
+
+          y: 8px;
+
+          align_x: Center;
+          align_y: Center;
+          size: 16;
+
+          text: "#asset/base/text/ui?mods.deps_header";
+        }
+
+        #deps_scroll:scroll_view {
+          x: 16px;
+          y: 36px;
+          width: 454px;
+          height: 70px;
+
+          speed: 60;
+          bar_width: 3;
+
+          bar: {
+            source: "asset/base/sprite/white";
+            color: #37d5b3ff;
+            hover: {
+              color: #ecfbf8ff;
+            }
+          }
+
+          back: {
+            source: "asset/base/sprite/white";
+            color: #4a4c56ff;
+          }
+
+          #contents:empty {
+            width: 438px;
+            height: auto;
+
+            child_type: TopToBottom {
+              spacing: 2px;
+            }
+          }
+        }
+      }
+
+      #version_panel:color {
+        x: 500px;
+        y: 588px;
+        width: 200px;
+        height: 114px;
+
+        color: #252738ff;
+
+        rounding: Uniform {
+          rounding: 8;
+        }
+
+        #version_header:label {
+          @"asset/base/style/main#bold_label";
+          width: 200px;
+          height: 24px;
+
+          y: 8px;
+
+          align_x: Center;
+          align_y: Center;
+          size: 16;
+
+          text: "#asset/base/text/ui?mods.version_header";
+        }
+
+        #version_text:label {
+          @"asset/base/style/main#label";
+          width: 200px;
+          height: 82px;
+
+          y: 32px;
+
+          align_x: Center;
+          align_y: Center;
+          size: 16;
+
+          text: "-";
+        }
+      }
+    }
+
+    #tooltip:color {
+      width: 400px;
+      height: 36px;
+
+      visible: false;
+
+      color: #252738ff;
+
+      rounding: Uniform {
+        rounding: 8;
+      }
+
+      #text:label {
+        @"asset/base/style/main#label";
+        width: 380px;
+        height: 36px;
+
+        x: 10px;
+
+        align_y: Center;
+        size: 14;
+        color: #ff6b6bff;
+
+        text: "";
+      }
+    }
+
+    #bottom_buttons:empty {
+      anchor_x: 0.5;
+      pivot_x: 0.5;
+      anchor_y: 1;
+      pivot_y: 1;
+      y: -24px;
+
+      width: 416px;
+      height: 40px;
+
+      child_type: LeftToRight {
+        spacing: 16px;
+      }
+
+      #steam_workshop:color_icon_button {
+        @"asset/base/style/main#tertiary_button";
+
+        width: 200px;
+        height: 40px;
+
+        icon: {
+          rect: {
+            x: 12;
+            y: 10;
+            w: 20;
+            h: 21;
+          }
+
+          source: "asset/base/ui/icons/steam";
+        }
+
+        text: {
+          text: "#asset/base/text/ui?mods.steam_workshop";
+          font: "asset/base/font/set/bold";
+          size: 16;
+          align_x: Center;
+          align_y: Center;
+        }
+      }
+
+      #close:color_icon_button {
+        @"asset/base/style/main#tertiary_button";
+
+        width: 200px;
+        height: 40px;
+        text: {
+          text: "#asset/base/text/ui?mods.close";
+          font: "asset/base/font/set/bold";
+          size: 16;
+          align_x: Center;
+          align_y: Center;
+        }
+      }
+    }
+
+    #restart_notice:label {
+      @"asset/base/style/main#bold_label";
+
+      anchor_x: 0.5;
+      pivot_x: 0.5;
+      anchor_y: 1;
+      pivot_y: 1;
+
+      y: -74px;
+      width: 1000px;
+      height: 26px;
+
+      visible: false;
+
+      align_x: Center;
+      align_y: Center;
+      size: 16;
+      color: #eb3d4dff;
+
+      text: "#asset/base/text/ui?mods.restart_notice";
+    }
+  }
+
+  #mod_diagnostics_popup:color {
+    width: 1000px;
+    height: 650px;
+
+    anchor_x: 0.5;
+    pivot_x: 0.5;
+    anchor_y: 0.5;
+    pivot_y: 0.5;
+
+    visible: false;
+
+    color: #161721ff;
+
+    rounding: Uniform {
+      rounding: 12;
+    }
+
+    #header:empty {
+      width: 1000px;
+      height: 64px;
+
+      #title:label {
+        @"asset/base/style/main#bold_label";
+
+        width: 760px;
+        height: 64px;
+
+        x: 24px;
+
+        align_y: Center;
+        size: 20;
+        color: #f0a030ff;
+
+        text: "#asset/base/text/ui?mods.diagnostics_title";
+      }
+
+      #cancel:button {
+        width: 16px;
+        height: 16px;
+
+        anchor_x: 1;
+        pivot_x: 1;
+
+        x: -24px;
+        y: 24px;
+
+        source: "asset/base/ui/icons/cross";
+
+        color: #c2c6ceff;
+
+        hover: {
+          color: #e8e8e8ff;
+        }
+
+        active: {
+          color: #e8e8e8ff;
+        }
+      }
+    }
+
+    #summary:label {
+      @"asset/base/style/main#label";
+
+      x: 24px;
+      y: 64px;
+      width: 952px;
+      height: 52px;
+
+      align_x: Left;
+      align_y: Center;
+      size: 16;
+      color: #a3a9b6ff;
+
+      text: "#asset/base/text/ui?mods.diagnostics_summary";
+    }
+
+    #log_panel:color {
+      x: 24px;
+      y: 128px;
+      width: 952px;
+      height: 438px;
+
+      color: #252738ff;
+
+      rounding: Uniform {
+        rounding: 8;
+      }
+
+      #scroll:scroll_view {
+        x: 16px;
+        y: 16px;
+        width: 920px;
+        height: 406px;
+
+        speed: 100;
+        bar_width: 4;
+
+        bar: {
+          source: "asset/base/sprite/white";
+          color: #37d5b3ff;
+          hover: {
+            color: #ecfbf8ff;
+          }
+        }
+
+        back: {
+          source: "asset/base/sprite/white";
+          color: #4a4c56ff;
+        }
+
+        #contents:empty {
+          width: 904px;
+          height: auto;
+
+          #text:label {
+            @"asset/base/style/main#label";
+
+            width: 904px;
+            height: 10000px;
+
+            align_x: Left;
+            align_y: Top;
+            size: 15;
+            line_height: 24;
+            fit_height: true;
+
+            text: "";
+          }
+        }
+      }
+    }
+
+    #close:color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+
+      anchor_x: 0.5;
+      pivot_x: 0.5;
+      anchor_y: 1;
+      pivot_y: 1;
+
+      y: -24px;
+      width: 200px;
+      height: 40px;
+
+      text: {
+        text: "#asset/base/text/ui?mods.close";
+        font: "asset/base/font/set/bold";
+        size: 16;
+        align_x: Center;
+        align_y: Center;
+      }
+    }
+  }
+
+  #host_new_popup:color {
+    width: 639px;
+    height: 342px;
+
+    anchor_x: 0.5;
+    pivot_x: 0.5;
+    anchor_y: 0.5;
+    pivot_y: 0.5;
+
+    visible: false;
+
+    color: #161721ff;
+
+    rounding: Uniform {
+      rounding: 12;
+    }
+
+    #header:label {
+      @"asset/base/style/main#bold_label";
+
+      width: 400px;
+      height: 28px;
+
+      size: 18;
+
+      align_y: Center;
+      text: "#asset/base/text/ui?title.mp_host_new";
+
+      x: 24px;
+      y: 24px;
+    }
+
+    #cancel:button {
+      width: 16px;
+      height: 16px;
+
+      anchor_x: 1;
+      pivot_x: 1;
+
+      x: -24px;
+      y: 24px;
+
+      source: "asset/base/ui/icons/cross";
+
+      color: #c2c6ceff;
+
+      hover: {
+        color: #e8e8e8ff;
+      }
+
+      active: {
+        color: #e8e8e8ff;
+      }
+    }
+
+    #room_name_row:empty {
+      x: 24px;
+      y: 66px;
+      width: 591px;
+      height: 46px;
+
+      child_type: LeftToRight {
+        spacing: 0px;
+      }
+
+      #category:label {
+        @"asset/base/style/main#bold_label";
+        width: 133px;
+        height: 46px;
+
+        align_y: Center;
+        size: 16;
+        text: "#asset/base/text/ui?title.mp_room_name";
+      }
+
+      #name:text_edit {
+        @"asset/base/style/main#text_edit";
+
+        x: 13px;
+        width: 445px;
+        height: 46px;
+
+        size: 18;
+        align_y: Center;
+
+        padding: {
+          left: 15px;
+          top: 5px;
+          right: 15px;
+          bottom: 5px;
+        }
+
+        placeholder: "#asset/base/text/ui?title.mp_room_name_placeholder";
+        max_length: 30;
+      }
+    }
+
+    #visibility_row:empty {
+      x: 24px;
+      y: 126px;
+      width: 591px;
+      height: 45px;
+
+      child_type: LeftToRight {
+        spacing: 0px;
+      }
+
+      #category:label {
+        @"asset/base/style/main#bold_label";
+        width: 133px;
+        height: 45px;
+
+        align_y: Center;
+        size: 16;
+        text: "#asset/base/text/ui?title.mp_visibility";
+      }
+
+      #bg:color {
+        x: 13px;
+        width: 445px;
+        height: 39px;
+
+        padding: {
+          left: 4px;
+          right: 4px;
+          top: 4px;
+          bottom: 4px;
+        }
+
+        color: #4a4c56ff;
+        stroke: 1;
+        back_color: #00000000;
+
+        child_type: LeftToRight {
+          spacing: 0px;
+        }
+
+        rounding: Uniform {
+          rounding: 8;
+        }
+
+        #public:color_selectable {
+          @"asset/base/style/main#strategy_option";
+          width: 218px;
+          height: 31px;
+
+          label: {
+            size: 16;
+          }
+
+          selected_label: {
+            size: 16;
+          }
+
+          text: "#asset/base/text/ui?title.mp_public";
+        }
+
+        #private:color_selectable {
+          @"asset/base/style/main#strategy_option";
+          width: 219px;
+          height: 31px;
+
+          label: {
+            size: 16;
+          }
+
+          selected_label: {
+            size: 16;
+          }
+
+          text: "#asset/base/text/ui?title.mp_private";
+        }
+      }
+    }
+
+    #game_mode_row:empty {
+      x: 24px;
+      y: 185px;
+      width: 591px;
+      height: 45px;
+
+      child_type: LeftToRight {
+        spacing: 0px;
+      }
+
+      #category:label {
+        @"asset/base/style/main#bold_label";
+        width: 133px;
+        height: 45px;
+
+        align_y: Center;
+        size: 16;
+        text: "#asset/base/text/ui?title.mp_game_mode";
+      }
+
+      #bg:color {
+        x: 13px;
+        width: 445px;
+        height: 39px;
+
+        padding: {
+          left: 4px;
+          right: 4px;
+          top: 4px;
+          bottom: 4px;
+        }
+
+        color: #4a4c56ff;
+        stroke: 1;
+        back_color: #00000000;
+
+        child_type: LeftToRight {
+          spacing: 0px;
+        }
+
+        rounding: Uniform {
+          rounding: 8;
+        }
+
+        #friendly:color_selectable {
+          @"asset/base/style/main#strategy_option";
+          width: 218px;
+          height: 31px;
+
+          label: {
+            size: 16;
+          }
+
+          selected_label: {
+            size: 16;
+          }
+
+          text: "#asset/base/text/ui?title.mp_friendly";
+        }
+
+        #league:color_selectable {
+          @"asset/base/style/main#strategy_option";
+          width: 219px;
+          height: 31px;
+
+          label: {
+            size: 16;
+          }
+
+          selected_label: {
+            size: 16;
+          }
+
+          text: "#asset/base/text/ui?title.mp_league";
+        }
+      }
+    }
+
+    #no:color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+
+      x: 24px;
+      y: 278px;
+
+      width: 290.5px;
+      height: 40px;
+      text: {
+        text: "#asset/base/text/ui?common.cancel";
+        font: "asset/base/font/set/bold";
+        size: 18;
+        align_x: Center;
+        align_y: Center;
+      }
+    }
+
+    #ok:color_icon_button {
+      @"asset/base/style/main#primary_button";
+
+      x: -24px;
+      y: 278px;
+      anchor_x: 1;
+      pivot_x: 1;
+
+      width: 290.5px;
+      height: 40px;
+      text: {
+        text: "#asset/base/text/ui?title.mp_create_room";
+        font: "asset/base/font/set/bold";
+        size: 18;
+        align_x: Center;
+        align_y: Center;
+      }
+    }
+  }
+
+  #load_popup:color {
+    width: 1804px;
+    height: 899px;
+
+    anchor_x: 0.5;
+    pivot_x: 0.5;
+    anchor_y: 0.5;
+    pivot_y: 0.5;
+
+    visible: false;
+
+    color: #161721ff;
+
+    rounding: Uniform {
+      rounding: 12;
+    }
+
+    #header:empty {
+      width: 1804px;
+      height: 56px;
+
+      #title:label {
+        @"asset/base/style/main#bold_label";
+        width: 400px;
+        height: 56px;
+        size: 18;
+        align_y: Center;
+        text: "#asset/base/text/ui?title.load";
+        x: 24px;
+      }
+
+      #cancel:button {
+        width: 16px;
+        height: 16px;
+        anchor_x: 1;
+        pivot_x: 1;
+        x: -24px;
+        y: 20px;
+        source: "asset/base/ui/icons/cross";
+        color: #c2c6ceff;
+        hover: {
+          color: #e8e8e8ff;
+        }
+        active: {
+          color: #e8e8e8ff;
+        }
+      }
+    }
+
+    #panel:color {
+      width: 1756px;
+      height: 743px;
+      x: 24px;
+      y: 68px;
+
+      color: #1d1f2cff;
+
+      rounding: Uniform {
+        rounding: 8;
+      }
+
+      #table_header:empty {
+        width: 1756px;
+        height: 50px;
+
+        #h_team_name:label {
+          @"asset/base/style/main#bold_label";
+          x: 20px;
+          width: 300px;
+          height: 50px;
+          align_x: Center;
+          align_y: Center;
+          size: 14;
+          color: #e8e8e8ff;
+          text: "#asset/base/text/ui?title.save_team_name";
+        }
+
+        #h_manager_name:label {
+          @"asset/base/style/main#bold_label";
+          x: 340px;
+          width: 200px;
+          height: 50px;
+          align_x: Center;
+          align_y: Center;
+          size: 14;
+          color: #e8e8e8ff;
+          text: "#asset/base/text/ui?title.save_manager_name";
+        }
+
+        #h_date:label {
+          @"asset/base/style/main#bold_label";
+          x: 540px;
+          width: 200px;
+          height: 50px;
+          align_x: Center;
+          align_y: Center;
+          size: 14;
+          color: #e8e8e8ff;
+          text: "#asset/base/text/ui?title.save_date";
+        }
+
+        #h_ranking:label {
+          @"asset/base/style/main#bold_label";
+          x: 740px;
+          width: 150px;
+          height: 50px;
+          align_x: Center;
+          align_y: Center;
+          size: 14;
+          color: #e8e8e8ff;
+          text: "#asset/base/text/ui?title.save_ranking";
+        }
+
+        #h_play_time:label {
+          @"asset/base/style/main#bold_label";
+          x: 890px;
+          width: 200px;
+          height: 50px;
+          align_x: Center;
+          align_y: Center;
+          size: 14;
+          color: #e8e8e8ff;
+          text: "#asset/base/text/ui?title.save_play_time";
+        }
+
+        #h_game_mode:label {
+          @"asset/base/style/main#bold_label";
+          x: 1100px;
+          width: 150px;
+          height: 50px;
+          align_x: Center;
+          align_y: Center;
+          size: 14;
+          color: #e8e8e8ff;
+          text: "#asset/base/text/ui?title.save_game_mode";
+        }
+
+        #h_mods:label {
+          @"asset/base/style/main#bold_label";
+          x: 1250px;
+          width: 250px;
+          height: 50px;
+          align_x: Center;
+          align_y: Center;
+          size: 14;
+          color: #e8e8e8ff;
+          text: "#asset/base/text/ui?title.mods";
+        }
+      }
+
+      #slots:scroll_view {
+        width: 1756px;
+        height: 693px;
+        y: 50px;
+
+        speed: 100;
+        bar_width: 4;
+
+        bar: {
+          source: "asset/base/sprite/white";
+          color: #37d5b3ff;
+          hover: {
+            color: #ecfbf8ff;
+          }
+        }
+
+        back: {
+          source: "asset/base/sprite/white";
+          color: #00000000;
+        }
+
+        #contents:empty {
+          y: 4px;
+          width: 1756px;
+          height: auto;
+
+          margin: {
+            left: 20px;
+            right: 20px;
+          }
+
+          child_type: TopToBottom {
+            spacing: 10px;
+          }
+        }
+      }
+    }
+
+    #saved_host_options:empty {
+      x: 24px;
+      y: 68px;
+      width: 1756px;
+      height: 104px;
+      visible: false;
+
+      #room_name_row:empty {
+        width: 591px;
+        height: 46px;
+
+        child_type: LeftToRight {
+          spacing: 0px;
+        }
+
+        #category:label {
+          @"asset/base/style/main#bold_label";
+          width: 133px;
+          height: 46px;
+          align_y: Center;
+          size: 16;
+          text: "#asset/base/text/ui?title.mp_room_name";
+        }
+
+        #name:text_edit {
+          @"asset/base/style/main#text_edit";
+          x: 13px;
+          width: 445px;
+          height: 46px;
+          size: 18;
+          align_y: Center;
+
+          padding: {
+            left: 15px;
+            top: 5px;
+            right: 15px;
+            bottom: 5px;
+          }
+
+          placeholder: "#asset/base/text/ui?title.mp_room_name_placeholder";
+          max_length: 30;
+        }
+      }
+
+      #visibility_row:empty {
+        y: 58px;
+        width: 873px;
+        height: 45px;
+
+        child_type: LeftToRight {
+          spacing: 0px;
+        }
+
+        #category:label {
+          @"asset/base/style/main#bold_label";
+          width: 133px;
+          height: 45px;
+          align_y: Center;
+          size: 16;
+          text: "#asset/base/text/ui?title.mp_visibility";
+        }
+
+        #bg:color {
+          x: 13px;
+          width: 445px;
+          height: 39px;
+
+          padding: {
+            left: 4px;
+            right: 4px;
+            top: 4px;
+            bottom: 4px;
+          }
+
+          color: #4a4c56ff;
+          stroke: 1;
+          back_color: #00000000;
+
+          child_type: LeftToRight {
+            spacing: 0px;
+          }
+
+          rounding: Uniform {
+            rounding: 8;
+          }
+
+          #public:color_selectable {
+            @"asset/base/style/main#strategy_option";
+            width: 218px;
+            height: 31px;
+
+            label: {
+              size: 16;
+            }
+
+            selected_label: {
+              size: 16;
+            }
+
+            text: "#asset/base/text/ui?title.mp_public";
+          }
+
+          #private:color_selectable {
+            @"asset/base/style/main#strategy_option";
+            width: 219px;
+            height: 31px;
+
+            label: {
+              size: 16;
+            }
+
+            selected_label: {
+              size: 16;
+            }
+
+            text: "#asset/base/text/ui?title.mp_private";
+          }
+        }
+
+        #delete_file:color_icon_button {
+          @"asset/base/style/main#primary_button";
+          x: 32px;
+          width: 250px;
+          height: 39px;
+
+          btn: {
+            color: #eb3d4dff;
+          }
+
+          hover: {
+            btn: {
+              color: #ff5a6aff;
+            }
+          }
+
+          text: {
+            text: "#asset/base/text/ui?title.save_delete";
+            font: "asset/base/font/set/bold";
+            size: 16;
+            align_x: Center;
+            align_y: Center;
+          }
+        }
+      }
+    }
+
+    #bottom:empty {
+      width: 1756px;
+      height: 40px;
+      x: 24px;
+      y: 835px;
+
+      #delete_mode:color_icon_button {
+        @"asset/base/style/main#tertiary_button";
+
+        width: 870.5px;
+        height: 40px;
+        text: {
+          text: "#asset/base/text/ui?title.save_delete_mode";
+          font: "asset/base/font/set/bold";
+          size: 18;
+          align_x: Center;
+          align_y: Center;
+        }
+      }
+
+      #back_to_load:color_icon_button {
+        @"asset/base/style/main#secondary_button";
+        visible: false;
+
+        width: 870.5px;
+        height: 40px;
+        text: {
+          text: "#asset/base/text/ui?title.save_back_to_load";
+          font: "asset/base/font/set/bold";
+          size: 18;
+          align_x: Center;
+          align_y: Center;
+        }
+      }
+
+      #close:color_icon_button {
+        @"asset/base/style/main#tertiary_button";
+
+        anchor_x: 1;
+        pivot_x: 1;
+
+        width: 870.5px;
+        height: 40px;
+        text: {
+          text: "#asset/base/text/ui?title.save_close";
+          font: "asset/base/font/set/bold";
+          size: 18;
+          align_x: Center;
+          align_y: Center;
+        }
+      }
+
+      #cancel_saved_host:color_icon_button {
+        @"asset/base/style/main#tertiary_button";
+        visible: false;
+
+        width: 870.5px;
+        height: 40px;
+        text: {
+          text: "#asset/base/text/ui?common.cancel";
+          font: "asset/base/font/set/bold";
+          size: 18;
+          align_x: Center;
+          align_y: Center;
+        }
+      }
+
+      #create_saved_host:color_icon_button {
+        @"asset/base/style/main#primary_button";
+        visible: false;
+
+        anchor_x: 1;
+        pivot_x: 1;
+
+        width: 870.5px;
+        height: 40px;
+        text: {
+          text: "#asset/base/text/ui?title.mp_create_room";
+          font: "asset/base/font/set/bold";
+          size: 18;
+          align_x: Center;
+          align_y: Center;
+        }
+      }
+    }
+  }
+
+  #delete_fade:color_icon_button {
+    width: 100%;
+    height: 100%;
+
+    btn: {
+      color: #60708540;
+    }
+
+    visible: false;
+  }
+
+  #mod_compat_fade:color_icon_button {
+    width: 100%;
+    height: 100%;
+
+    btn: {
+      color: #60708540;
+    }
+
+    visible: false;
+  }
+
+  #mod_compat_popup:color {
+    width: 760px;
+    height: 500px;
+
+    anchor_x: 0.5;
+    pivot_x: 0.5;
+    anchor_y: 0.5;
+    pivot_y: 0.5;
+
+    visible: false;
+
+    color: #161721ff;
+
+    rounding: Uniform {
+      rounding: 12;
+    }
+
+    #title:label {
+      @"asset/base/style/main#bold_label";
+      width: 712px;
+      height: 30px;
+      x: 24px;
+      y: 24px;
+      size: 20;
+      align_y: Center;
+      color: #f0a030ff;
+      text: "";
+    }
+
+    #message:label {
+      @"asset/base/style/main#label";
+      width: 712px;
+      height: 58px;
+      x: 24px;
+      y: 70px;
+      size: 17;
+      line_height: 26;
+      align_y: Top;
+      color: #e8e8e8ff;
+      text: "";
+    }
+
+    #details:label {
+      @"asset/base/style/main#label";
+      width: 712px;
+      height: 210px;
+      x: 24px;
+      y: 144px;
+      size: 15;
+      line_height: 22;
+      align_y: Top;
+      color: #a3a9b6ff;
+      text: "";
+    }
+
+    #remember:empty {
+      x: 24px;
+      y: 372px;
+
+      width: 712px;
+      height: 40px;
+      visible: false;
+
+      #check:color_icon_button {
+        width: 18px;
+        height: 18px;
+        anchor_y: 0.5;
+        pivot_y: 0.5;
+
+        btn: {
+          rounding: Uniform {
+            rounding: 2;
+          }
+          color: #858d9dff;
+          stroke: 2;
+          back_color: #00000000;
+        }
+
+        hover: {
+          btn: {
+            color: #e8e8e8ff;
+          }
+        }
+      }
+
+      #label:label {
+        @"asset/base/style/main#label";
+        x: 28px;
+        width: 300px;
+        height: 40px;
+        align_y: Center;
+        size: 14;
+        color: #858d9dff;
+        text: "#asset/base/text/ui?mods.compat_dont_show_again";
+      }
+
+      #label_btn:color_icon_button {
+        x: 28px;
+        width: 300px;
+        height: 40px;
+        btn: {
+          color: #00000000;
+          back_color: #00000000;
+        }
+        hover_sound: "asset/base/sound/sfx/UI_mouse_hover";
+        click_sound: "asset/base/sound/sfx/UI_mouse_click";
+        hover: {
+          btn: {
+            color: #00000000;
+            back_color: #00000000;
+          }
+        }
+        text: {
+          text: "";
+        }
+      }
+    }
+
+    #cancel:color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+
+      x: 24px;
+      y: 436px;
+
+      width: 348px;
+      height: 40px;
+      text: {
+        text: "#asset/base/text/ui?title.save_cancel";
+        font: "asset/base/font/set/bold";
+        size: 18;
+        align_x: Center;
+        align_y: Center;
+      }
+    }
+
+    #force:color_icon_button {
+      @"asset/base/style/main#primary_button";
+
+      x: -24px;
+      y: 436px;
+      anchor_x: 1;
+      pivot_x: 1;
+
+      width: 348px;
+      height: 40px;
+      text: {
+        text: "#asset/base/text/ui?title.save_confirm";
+        font: "asset/base/font/set/bold";
+        size: 18;
+        align_x: Center;
+        align_y: Center;
+      }
+    }
+  }
+
+  #delete_confirm:color {
+    width: 529px;
+    height: 213px;
+
+    anchor_x: 0.5;
+    pivot_x: 0.5;
+    anchor_y: 0.5;
+    pivot_y: 0.5;
+
+    visible: false;
+
+    color: #161721ff;
+
+    rounding: Uniform {
+      rounding: 12;
+    }
+
+    #title:label {
+      @"asset/base/style/main#bold_label";
+      width: 481px;
+      height: 28px;
+      x: 24px;
+      y: 24px;
+      size: 18;
+      align_y: Center;
+      text: "#asset/base/text/ui?title.save_delete_mode";
+    }
+
+    #msg:label {
+      @"asset/base/style/main#label";
+      width: 481px;
+      height: 24px;
+      x: 24px;
+      y: 68px;
+      size: 18;
+      color: #e8e8e8ff;
+      text: "#asset/base/text/ui?title.save_delete_confirm";
+    }
+
+    #warn:label {
+      @"asset/base/style/main#label";
+      width: 481px;
+      height: 20px;
+      x: 24px;
+      y: 96px;
+      size: 16;
+      color: #eb3d4dff;
+      text: "#asset/base/text/ui?title.save_delete_warn";
+    }
+
+    #cancel:color_icon_button {
+      @"asset/base/style/main#tertiary_button";
+
+      x: 24px;
+      y: 149px;
+
+      width: 237px;
+      height: 40px;
+      text: {
+        text: "#asset/base/text/ui?title.save_cancel";
+        font: "asset/base/font/set/bold";
+        size: 18;
+        align_x: Center;
+        align_y: Center;
+      }
+    }
+
+    #ok:color_icon_button {
+      @"asset/base/style/main#primary_button";
+
+      x: -24px;
+      y: 149px;
+      anchor_x: 1;
+      pivot_x: 1;
+
+      width: 237px;
+      height: 40px;
+      text: {
+        text: "#asset/base/text/ui?title.save_confirm";
+        font: "asset/base/font/set/bold";
+        size: 18;
+        align_x: Center;
+        align_y: Center;
+      }
+    }
+  }
+
+  #disconnect_fade:color_icon_button {
+    width: 100%;
+    height: 100%;
+
+    btn: {
+      color: #60708540;
+    }
+
+    visible: false;
+  }
+
+  #disconnect_popup:color {
+    width: 450px;
+    height: 150px;
+
+    anchor_x: 0.5;
+    pivot_x: 0.5;
+    anchor_y: 0.5;
+    pivot_y: 0.5;
+
+    visible: false;
+
+    color: #161721ff;
+
+    rounding: Uniform {
+      rounding: 12;
+    }
+
+    #msg:label {
+      @"asset/base/style/main#bold_label";
+      width: 402px;
+      height: 28px;
+      x: 24px;
+      y: 30px;
+      size: 18;
+      align_y: Center;
+      text: "#asset/base/text/ui?room.disconnect_message";
+    }
+
+    #ok:color_icon_button {
+      @"asset/base/style/main#primary_button";
+
+      anchor_x: 0.5;
+      pivot_x: 0.5;
+      y: 86px;
+
+      width: 200px;
+      height: 40px;
+      text: {
+        text: "#asset/base/text/ui?title.save_confirm";
+        font: "asset/base/font/set/bold";
+        size: 18;
+        align_x: Center;
+        align_y: Center;
+      }
+    }
+  }
+}

@@ -1,0 +1,76 @@
+name: Bug report
+description: Report a reproducible Intro Skip problem.
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not upload personal save files. For potential data-loss or privacy issues, use the repository's private security reporting instead.
+  - type: input
+    id: game-version
+    attributes:
+      label: Teamfight Manager 2 version
+      placeholder: "0.5.0"
+    validations:
+      required: true
+  - type: input
+    id: mod-version
+    attributes:
+      label: Intro Skip version
+      placeholder: "0.4.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: setting
+    attributes:
+      label: Affected feature
+      options:
+        - Skip disclaimer
+        - Automatically select Continue
+        - Automatically Load Anyway
+        - Backup creation or retention
+        - Manual backup import
+        - Settings panel
+        - Installation or startup
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the smallest enabled-mod list that still reproduces the problem.
+      placeholder: |
+        1. Enable...
+        2. Start...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Relevant log lines
+      description: Paste only relevant lines from backup_status.log after removing private paths.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I am using a supported game version or understand this may be a compatibility report.
+          required: true
+        - label: I removed private information and did not attach a save file.
+          required: true

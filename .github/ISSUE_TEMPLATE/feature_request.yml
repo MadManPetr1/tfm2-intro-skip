@@ -1,0 +1,25 @@
+name: Feature request
+description: Suggest a focused improvement to Intro Skip.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What repetitive startup or recovery problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Save-safety impact
+      description: Could this read, write, load, delete, or replace save data?
+    validations:
+      required: true

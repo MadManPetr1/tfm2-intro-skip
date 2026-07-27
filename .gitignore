@@ -1,0 +1,11 @@
+/target/
+/builds/
+/intro_skip.dll
+*.pdb
+*.lib
+*.exp
+backup_status.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
