@@ -14,7 +14,7 @@ Safe, configurable startup automation for Teamfight Manager 2—with verified sa
 
 **Website**
 
-Use the Steam Workshop item URL after publishing.
+https://steamcommunity.com/sharedfiles/filedetails/?id=3773405658
 
 **Topics**
 

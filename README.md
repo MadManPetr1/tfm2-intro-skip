@@ -35,7 +35,8 @@ Safe, configurable startup automation for **Teamfight Manager 2**.
 
 ### Steam Workshop
 
-Subscribe on the Teamfight Manager 2 Workshop, enable **Intro Skip** in the in-game Mods menu, then restart the game when prompted.
+[Subscribe to Intro Skip](https://steamcommunity.com/sharedfiles/filedetails/?id=3773405658),
+enable it in the in-game Mods menu, then restart the game when prompted.
 
 ### Manual GitHub release
 
