@@ -159,8 +159,9 @@ released under the [Mozilla Public License 2.0](LICENSE). Distributed changes
 to covered files must remain available under MPL-2.0. Earlier tagged releases
 remain under the license shipped with those releases.
 
-The Intro Skip name and original branding are reserved and are not licensed
-under MPL-2.0. The adapted Teamfight Manager 2 UI layout remains subject to
-Team Samoyed's rights; see [NOTICE](NOTICE.md).
+MPL-2.0 does not grant trademark rights in the Intro Skip name. The original
+logo, banner, and thumbnail artwork are All Rights Reserved and are not covered
+by MPL-2.0. The adapted Teamfight Manager 2 UI layout remains subject to Team
+Samoyed's rights; see [NOTICE](NOTICE.md).
 
 This is an independent community mod and is not affiliated with or endorsed by Team Samoyed.

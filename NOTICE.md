@@ -7,9 +7,10 @@ copyright © 2026 MadManPetr1 and are available under the Mozilla Public License
 2.0. Earlier tagged releases remain available under the license included with
 those releases.
 
-The Intro Skip name and original branding assets—including `thumbnail.png` and
-the files under `assets/`—are copyright © 2026 MadManPetr1 and are not licensed
-under MPL-2.0. They may be displayed as part of the original project and its
-unmodified release packages. Other reuse requires permission.
+MPL-2.0 does not grant trademark rights in the Intro Skip name. Original
+artwork—including `thumbnail.png` and the files under `assets/`—is copyright
+© 2026 MadManPetr1, All Rights Reserved. It may remain with unmodified copies
+of the original project and its official release packages. Forks must use
+their own artwork unless permission is granted.
 
 This project is an independent community mod. It is not affiliated with or endorsed by Team Samoyed.

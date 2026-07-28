@@ -74,7 +74,8 @@ SOURCE AND CONTRIBUTIONS
 
 Source code and documentation are available under MPL-2.0. Distributed
 modifications to covered files must remain available under the same license.
-The Intro Skip name and original branding are reserved.
+The original logo, banner, and thumbnail artwork are All Rights Reserved.
+Forks must use their own name and artwork.
 
 ## GitHub v0.4.4 release
 

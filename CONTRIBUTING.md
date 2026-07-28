@@ -8,9 +8,9 @@ By submitting a contribution, you agree to license it under the
 [Mozilla Public License 2.0](LICENSE). Submit only work you created or have the
 right to contribute.
 
-The Intro Skip name, logo, banner, thumbnail, and other original branding are
-not part of the source-code license. Please do not use them to present a fork
-as an official Intro Skip release.
+MPL-2.0 does not grant trademark rights in the Intro Skip name. The original
+logo, banner, and thumbnail artwork are All Rights Reserved. Forks should use
+their own name and artwork.
 
 ## Before opening an issue
 
