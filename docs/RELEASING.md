@@ -39,7 +39,7 @@ The repository package already includes these files.
 ```powershell
 git init
 git add .
-git commit -m "Release Intro Skip v0.4.3"
+git commit -m "Release Intro Skip v0.4.4"
 git branch -M main
 git remote add origin https://github.com/MadManPetr1/tfm2-intro-skip.git
 git push -u origin main
@@ -52,12 +52,12 @@ Then configure:
 - **Features:** keep Issues enabled; Discussions is optional.
 - **Security:** enable private vulnerability reporting.
 
-## 4. Publish GitHub v0.4.3
+## 4. Publish GitHub v0.4.4
 
 1. Open **Releases → Draft a new release**.
-2. Create tag `v0.4.3` targeting `main`.
+2. Create tag `v0.4.4` targeting `main`.
 3. Paste the release title and notes from `docs/PRESENTATION.md`.
-4. Attach `builds\intro-skip-v0.4.3.zip`.
+4. Attach `builds\intro-skip-v0.4.4.zip`.
 5. Mark it as the latest release.
 6. Publish.
 
@@ -79,4 +79,4 @@ Initial public release: configurable startup skipping, guarded automatic Continu
 
 ## 6. Final public check
 
-Install once from GitHub Releases and once through Workshop on a clean mod folder. Confirm both installations show version `0.4.3`, include the DLL, load the settings panel, and retain the safe defaults.
+Install once from GitHub Releases and once through Workshop on a clean mod folder. Confirm both installations show version `0.4.4`, include the DLL, load the settings panel, and retain the safe defaults.

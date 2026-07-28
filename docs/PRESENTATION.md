@@ -62,7 +62,7 @@ If automatic Load Anyway is enabled, Intro Skip first copies the latest career s
 
 COMPATIBILITY
 
-Intro Skip 0.4.3 is built for Teamfight Manager 2 0.5.0. Compatibility with newer game versions is not yet verified.
+Intro Skip 0.4.4 is built for Teamfight Manager 2 0.5.2.
 
 RECOVERY
 
@@ -70,17 +70,17 @@ Automatic backups are retained for 3, 7, 14, or 30 days. Select one of the five 
 
 This is an independent community mod and is not affiliated with or endorsed by Team Samoyed.
 
-## GitHub v0.4.3 release
+## GitHub v0.4.4 release
 
 **Release title**
 
-Intro Skip v0.4.3 — Configurable Recovery
+Intro Skip v0.4.4 — TFM2 0.5.2 Compatibility
 
 **Release notes**
 
-Intro Skip provides safe, configurable startup automation for Teamfight Manager 2 0.5.0.
+Intro Skip provides safe, configurable startup automation for Teamfight Manager 2 0.5.2.
 
-Version 0.4.3 adds configurable backup retention, a selectable list of the five latest verified backups, visible action status, and a cleaner Mods-screen layout.
+Version 0.4.4 rebuilds the native mod for TFM2 0.5.2 and fixes the Mods-screen settings card sizing while retaining configurable backup retention and manual recovery imports.
 
 Highlights:
 
@@ -94,7 +94,7 @@ Highlights:
 
 Only disclaimer skipping is enabled by default. Automatic Continue and Load Anyway remain opt-in.
 
-Install `intro-skip-v0.4.3.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
+Install `intro-skip-v0.4.4.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
 
 ## Launch post
 
@@ -102,7 +102,7 @@ Install `intro-skip-v0.4.3.zip` from the assets below. Do not use GitHub's autom
 
 It skips the disclaimer, can continue your latest career automatically, and can handle mod-state mismatch prompts—but only after creating and verifying a save backup. The riskier options are off by default, backups are retained for seven days, and recovery always stays manual.
 
-Built for TFM2 0.5.0.
+Built for TFM2 0.5.2.
 
 ## Screenshot plan
 

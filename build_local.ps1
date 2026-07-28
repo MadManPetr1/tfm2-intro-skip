@@ -5,7 +5,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 if ([string]::IsNullOrWhiteSpace($SdkDir)) {
-    throw "Pass -SdkDir <path-to-v0.5.0-mod-sdk> or set TFM2_MOD_SDK."
+    throw "Pass -SdkDir <path-to-v0.5.2-mod-sdk> or set TFM2_MOD_SDK."
 }
 
 $sdk = (Resolve-Path -LiteralPath $SdkDir).Path

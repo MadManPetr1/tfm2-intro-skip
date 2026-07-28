@@ -737,7 +737,7 @@ body:color {
             align_y: Center;
             size: 15;
             color: #ecfbf8ff;
-            text: "Version 0.4.3";
+            text: "Version 0.4.4";
           }
 
           #intro_skip_header_dependencies:label {
@@ -752,7 +752,7 @@ body:color {
             align_y: Center;
             size: 14;
             color: #a3a9b6ff;
-            text: "Requires base >=0.5.0, <0.5.1";
+            text: "Requires base >=0.5.2, <0.5.3";
           }
         }
       }
@@ -760,7 +760,7 @@ body:color {
       #description_panel:color {
         y: 134px;
         width: 700px;
-        height: 568px;
+        height: 440px;
 
         color: #252738ff;
 
@@ -819,7 +819,7 @@ body:color {
       #intro_skip_settings:color {
         y: 134px;
         width: 700px;
-        height: 440px;
+        height: 568px;
         z: 10;
         visible: false;
 

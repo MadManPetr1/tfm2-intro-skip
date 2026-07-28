@@ -6,6 +6,17 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-07-28
+
+### Changed
+
+- Rebuilt the native mod against the Teamfight Manager 2 `0.5.2` Mod SDK.
+- Updated the supported game range to `>=0.5.2, <0.5.3`.
+
+### Fixed
+
+- Size the Intro Skip settings card to contain all recovery controls and restore the base description card to its original height.
+
 ## [0.4.3] - 2026-07-27
 
 ### Added
@@ -50,7 +61,8 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 - Automatic Load Anyway is blocked unless the latest save has been copied and byte-verified.
 - Recovery import always creates a separate save and remains a manual action.
 
-[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.3...HEAD
+[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.4...HEAD
+[0.4.4]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/MadManPetr1/tfm2-intro-skip/tree/v0.4.1
