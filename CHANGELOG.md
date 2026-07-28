@@ -6,6 +6,12 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+### Changed
+
+- Standardized the public documentation and contribution guidance across the MadManPetr1 TFM2 mod collection.
+- Relicensed new project versions under MPL-2.0 so distributed changes to covered files remain shareable.
+- Reserved the original project branding and artwork from the source-code license.
+
 ## [0.4.4] - 2026-07-28
 
 ### Changed

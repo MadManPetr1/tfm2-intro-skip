@@ -1,3 +1,7 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 param()
 
 $ErrorActionPreference = "Stop"
@@ -27,7 +31,14 @@ function Require-File([string]$relativePath) {
     "assets/logo-32.png",
     "ui/layout/title.ui",
     "README.md",
-    "LICENSE"
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "LICENSE",
+    "NOTICE.md",
+    "docs/PRESENTATION.md",
+    "docs/RELEASING.md",
+    "scripts/package_release.ps1"
 ) | ForEach-Object { Require-File $_ }
 
 function Get-PngDimensions([string]$relativePath) {
@@ -86,6 +97,9 @@ if (-not $cargoVersionMatch.Success) {
 }
 if ($cargoVersionMatch.Groups[1].Value -ne $modInfo.version) {
     throw "Version mismatch: Cargo.toml is $($cargoVersionMatch.Groups[1].Value), mod.mod_info is $($modInfo.version)."
+}
+if ($cargo -notmatch '(?m)^license\s*=\s*"MPL-2\.0"') {
+    throw "Cargo.toml must declare MPL-2.0."
 }
 
 foreach ($setting in "skip_disclaimer", "auto_continue", "auto_load_anyway") {

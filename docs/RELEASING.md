@@ -1,6 +1,6 @@
-# Release and publishing guide
+# Release guide
 
-## 1. Pre-release verification
+## 1. Verify
 
 - Test the exact target game version.
 - Test each setting independently.
@@ -11,72 +11,41 @@
 - Confirm the mod works at multiple window sizes and display scales.
 - Run `.\scripts\validate_repo.ps1`.
 
-Do not broaden the version range in `mod.mod_info` until that game version has been tested.
+Do not broaden the version range in `mod.mod_info` until that game version has
+been tested.
 
-## 2. Create the player archive
-
-From PowerShell:
+## 2. Package
 
 ```powershell
 .\scripts\package_release.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk"
 ```
 
-Inspect `builds\intro-skip-vX.Y.Z.zip`. Its top-level folder must be `intro_skip`, and that folder must contain `intro_skip.dll`.
+Inspect `builds\intro-skip-vX.Y.Z.zip`. Its top-level folder must be
+`intro_skip`, and that folder must contain `intro_skip.dll`.
 
-## 3. Create the GitHub repository
+## 3. Check the repository
 
-Recommended settings:
+Confirm the public repository is `MadManPetr1/tfm2-intro-skip`, Issues are
+enabled, private vulnerability reporting is available, and the description and
+topics match `docs/PRESENTATION.md`.
 
-- Owner: `MadManPetr1`
-- Repository: `TFM2---Intro-Skip`
-- Visibility: Public
-- Initialize with README: No
-- Add `.gitignore`: No
-- Add license: No
+## 4. Publish
 
-The repository package already includes these files.
+- Tag the exact source used to build the archive.
+- Paste the release title and notes from `docs/PRESENTATION.md`.
+- Attach the matching `builds\intro-skip-vX.Y.Z.zip` archive.
+- Install the archive once into a clean mod folder before publishing.
+- Keep the Workshop and GitHub version numbers aligned.
 
-```powershell
-git init
-git add .
-git commit -m "Release Intro Skip v0.4.4"
-git branch -M main
-git remote add origin https://github.com/MadManPetr1/tfm2-intro-skip.git
-git push -u origin main
-```
-
-Then configure:
-
-- **About:** paste the description and topics from `docs/PRESENTATION.md`.
-- **Social preview:** upload `assets/banner.png`.
-- **Features:** keep Issues enabled; Discussions is optional.
-- **Security:** enable private vulnerability reporting.
-
-## 4. Publish GitHub v0.4.4
-
-1. Open **Releases → Draft a new release**.
-2. Create tag `v0.4.4` targeting `main`.
-3. Paste the release title and notes from `docs/PRESENTATION.md`.
-4. Attach `builds\intro-skip-v0.4.4.zip`.
-5. Mark it as the latest release.
-6. Publish.
-
-## 5. Publish to Steam Workshop
-
-1. Copy the packaged `intro_skip` folder to `Teamfight Manager2\mods\intro_skip`.
-2. Start Steam and open `TFM2ModUploader.exe` from the game directory.
-3. Select that exact runtime folder.
-4. Add the title and description from `docs/PRESENTATION.md`.
-5. Add the real in-game screenshots from the screenshot plan.
-6. Choose visibility and publish.
-7. Add the Workshop URL to the GitHub repository's Website field.
-
-For the first upload, use the change note:
+For the Workshop listing, use the title, description, and screenshot plan from
+`docs/PRESENTATION.md`. The first-upload change note can be:
 
 ```text
 Initial public release: configurable startup skipping, guarded automatic Continue/Load Anyway, verified save backups, and manual recovery import.
 ```
 
-## 6. Final public check
+## 5. Final public check
 
-Install once from GitHub Releases and once through Workshop on a clean mod folder. Confirm both installations show version `0.4.4`, include the DLL, load the settings panel, and retain the safe defaults.
+Install once from GitHub Releases and once through Workshop on a clean mod
+folder. Confirm both installations show the released version, include the DLL,
+load the settings panel, and retain the safe defaults.

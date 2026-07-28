@@ -6,7 +6,7 @@ This page contains ready-to-paste text for the repository and Steam Workshop lau
 
 **Repository name**
 
-`TFM2---Intro-Skip`
+`tfm2-intro-skip`
 
 **Description**
 
@@ -69,6 +69,12 @@ RECOVERY
 Automatic backups are retained for 3, 7, 14, or 30 days. Select one of the five latest verified backups in the Mods screen to create a separate recovery save. Recovery is never loaded automatically.
 
 This is an independent community mod and is not affiliated with or endorsed by Team Samoyed.
+
+SOURCE AND CONTRIBUTIONS
+
+Source code and documentation are available under MPL-2.0. Distributed
+modifications to covered files must remain available under the same license.
+The Intro Skip name and original branding are reserved.
 
 ## GitHub v0.4.4 release
 
