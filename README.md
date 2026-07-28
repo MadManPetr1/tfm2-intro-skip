@@ -11,7 +11,7 @@ Safe, configurable startup automation for **Teamfight Manager 2**.
 </div>
 
 > [!IMPORTANT]
-> Version **0.4.4** is built for Teamfight Manager 2 **0.5.2**.
+> Version **0.4.5** is built for Teamfight Manager 2 **0.5.2**.
 
 ## Features
 
@@ -124,7 +124,7 @@ To validate and create a player-ready release archive:
 .\scripts\package_release.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk"
 ```
 
-The archive is written to `builds\intro-skip-v0.4.4.zip`.
+The archive is written to `builds\intro-skip-v0.4.5.zip`.
 
 ## Project layout
 
@@ -134,6 +134,7 @@ The archive is written to `builds\intro-skip-v0.4.4.zip`.
 - `mod.override_info` — asset remapping
 - `settings.json` — source reference for the safe defaults; player settings are stored in AppData
 - `thumbnail.png` — 512×512 in-game/Workshop thumbnail
+- `assets/thumbnail-master.png` — original 128×128 pixel-art thumbnail
 - `assets/logo-1024.png` — official pixel-art logo master
 - `assets/logo-{512,256,128,64,32}.png` — ready-to-use logo exports
 - `assets/banner.png` — 1280×640 GitHub social preview

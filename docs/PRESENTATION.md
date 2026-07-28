@@ -62,7 +62,7 @@ If automatic Load Anyway is enabled, Intro Skip first copies the latest career s
 
 COMPATIBILITY
 
-Intro Skip 0.4.4 is built for Teamfight Manager 2 0.5.2.
+Intro Skip 0.4.5 is built for Teamfight Manager 2 0.5.2.
 
 RECOVERY
 
@@ -77,17 +77,19 @@ modifications to covered files must remain available under the same license.
 The original logo, banner, and thumbnail artwork are All Rights Reserved.
 Forks must use their own name and artwork.
 
-## GitHub v0.4.4 release
+## GitHub v0.4.5 release
 
 **Release title**
 
-Intro Skip v0.4.4 — TFM2 0.5.2 Compatibility
+Intro Skip v0.4.5 — Public Release Polish
 
 **Release notes**
 
 Intro Skip provides safe, configurable startup automation for Teamfight Manager 2 0.5.2.
 
-Version 0.4.4 rebuilds the native mod for TFM2 0.5.2 and fixes the Mods-screen settings card sizing while retaining configurable backup retention and manual recovery imports.
+Version 0.4.5 adds the creator-provided pixel-art thumbnail and standardized
+public documentation and licensing. Runtime behavior remains unchanged from
+0.4.4.
 
 Highlights:
 
@@ -101,7 +103,7 @@ Highlights:
 
 Only disclaimer skipping is enabled by default. Automatic Continue and Load Anyway remain opt-in.
 
-Install `intro-skip-v0.4.4.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
+Install `intro-skip-v0.4.5.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
 
 ## Launch post
 

@@ -22,6 +22,7 @@ function Require-File([string]$relativePath) {
     "mod.override_info",
     "settings.json",
     "thumbnail.png",
+    "assets/thumbnail-master.png",
     "assets/banner.png",
     "assets/logo-1024.png",
     "assets/logo-512.png",

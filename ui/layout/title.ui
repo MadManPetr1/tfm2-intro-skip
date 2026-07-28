@@ -737,7 +737,7 @@ body:color {
             align_y: Center;
             size: 15;
             color: #ecfbf8ff;
-            text: "Version 0.4.4";
+            text: "Version 0.4.5";
           }
 
           #intro_skip_header_dependencies:label {

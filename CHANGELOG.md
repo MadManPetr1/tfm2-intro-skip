@@ -6,11 +6,15 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.4.5] - 2026-07-28
+
 ### Changed
 
 - Standardized the public documentation and contribution guidance across the MadManPetr1 TFM2 mod collection.
 - Relicensed new project versions under MPL-2.0 so distributed changes to covered files remain shareable.
-- Reserved the original project branding and artwork from the source-code license.
+- Clarified that the original project artwork remains outside the source-code
+  license.
+- Updated the pixel-art thumbnail with the creator-provided revision.
 
 ## [0.4.4] - 2026-07-28
 
@@ -67,7 +71,8 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 - Automatic Load Anyway is blocked unless the latest save has been copied and byte-verified.
 - Recovery import always creates a separate save and remains a manual action.
 
-[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.4...HEAD
+[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.5...HEAD
+[0.4.5]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.4...v0.4.5
 [0.4.4]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.1...v0.4.2
