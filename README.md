@@ -11,7 +11,7 @@ Safe, configurable startup automation for **Teamfight Manager 2**.
 </div>
 
 > [!IMPORTANT]
-> Version **0.4.5** is built for Teamfight Manager 2 **0.5.2**.
+> Version **0.4.6** is built for Teamfight Manager 2 **0.5.3**.
 
 ## Features
 
@@ -103,9 +103,9 @@ Managed backups older than the selected retention period are removed. Diagnostic
 
 ## Requirements and limitations
 
-- Teamfight Manager 2 `0.5.2`
+- Teamfight Manager 2 `0.5.3`
 - Windows
-- The matching `0.5.2` Mod SDK for source builds
+- The matching `0.5.3` Mod SDK for source builds
 - Automatic UI actions require the game window title `Teamfight Manager2`
 
 ## Building from source
@@ -125,7 +125,7 @@ To validate and create a player-ready release archive:
 .\scripts\package_release.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk"
 ```
 
-The archive is written to `builds\intro-skip-v0.4.5.zip`.
+The archive is written to `builds\intro-skip-v0.4.6.zip`.
 
 ## Project layout
 

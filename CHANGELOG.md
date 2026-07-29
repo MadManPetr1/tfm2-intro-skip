@@ -6,6 +6,29 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.4.6] - 2026-07-29
+
+### Changed
+
+- Rebuilt the native mod against the Teamfight Manager 2 `0.5.3` Mod SDK.
+- Updated the supported game range to `>=0.5.3, <0.5.4`.
+- Updated the local build wrapper to link the SDK's LLVM bitcode with its
+  pinned Rust LLVM linker.
+
+### Performance
+
+- Avoid repeated full settings-panel UI tree updates while another mod is
+  selected.
+- Reuse the native game-window title and keep save verification buffers off
+  the game thread's stack.
+
+### Fixed
+
+- Guard automatic clicks while the game window has no usable client area,
+  preventing an invalid coordinate clamp while minimized.
+- Always attempt to release the synthetic mouse button if a preceding window
+  message fails.
+
 ## [0.4.5] - 2026-07-28
 
 ### Changed
@@ -71,7 +94,8 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 - Automatic Load Anyway is blocked unless the latest save has been copied and byte-verified.
 - Recovery import always creates a separate save and remains a manual action.
 
-[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.5...HEAD
+[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.6...HEAD
+[0.4.6]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.5...v0.4.6
 [0.4.5]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.4...v0.4.5
 [0.4.4]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.2...v0.4.3

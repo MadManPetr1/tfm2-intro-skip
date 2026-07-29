@@ -13,6 +13,9 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 const MOD_ID: &str = "intro_skip";
 const MOD_NAME: &str = "Intro Skip";
 const SETTINGS_PANEL_ID: &str = "intro_skip_settings";
+const GAME_WINDOW_TITLE: &[u16] = &[
+    84, 101, 97, 109, 102, 105, 103, 104, 116, 32, 77, 97, 110, 97, 103, 101, 114, 50, 0,
+];
 
 const DISCLAIMER_ON_ID: &str = "intro_skip_disclaimer_on";
 const DISCLAIMER_OFF_ID: &str = "intro_skip_disclaimer_off";
@@ -189,13 +192,16 @@ impl ModExtension for IntroSkipExtension {
         if show_settings && !was_showing_settings {
             self.refresh_backup_count();
         }
-        sync_settings_panel(
-            &mut ui.root,
-            self.settings.snapshot(),
-            show_settings,
-            self.status_notice.current_and_tick(),
-            self.backup_count.load(Ordering::Acquire),
-        );
+        let status = self.status_notice.current_and_tick();
+        if show_settings || was_showing_settings {
+            sync_settings_panel(
+                &mut ui.root,
+                self.settings.snapshot(),
+                show_settings,
+                status,
+                self.backup_count.load(Ordering::Acquire),
+            );
+        }
         if show_settings && settings_mouse_pressed {
             self.handle_settings_mouse_click(ui);
         }
@@ -721,8 +727,8 @@ fn files_are_equal(first: &std::path::Path, second: &std::path::Path) -> Result<
         .map_err(|error| format!("cannot open {}: {error}", first.display()))?;
     let mut second_file = fs::File::open(second)
         .map_err(|error| format!("cannot open {}: {error}", second.display()))?;
-    let mut first_buffer = [0_u8; 64 * 1024];
-    let mut second_buffer = [0_u8; 64 * 1024];
+    let mut first_buffer = vec![0_u8; 64 * 1024];
+    let mut second_buffer = vec![0_u8; 64 * 1024];
 
     loop {
         let first_read = first_file
@@ -929,11 +935,7 @@ fn post_node_click(ui: &GameUI, id: &str) -> bool {
 }
 
 fn game_window() -> *mut c_void {
-    let window_title: Vec<u16> = "Teamfight Manager2"
-        .encode_utf16()
-        .chain(std::iter::once(0))
-        .collect();
-    unsafe { FindWindowW(std::ptr::null(), window_title.as_ptr()) }
+    unsafe { FindWindowW(std::ptr::null(), GAME_WINDOW_TITLE.as_ptr()) }
 }
 
 fn cursor_ui_position(ui: &GameUI) -> Option<(f32, f32)> {
@@ -993,6 +995,9 @@ fn post_ui_click(ui: &GameUI, ui_x: f32, ui_y: f32) -> bool {
 
     let client_width = (rect.right - rect.left) as f32;
     let client_height = (rect.bottom - rect.top) as f32;
+    if client_width <= 0.0 || client_height <= 0.0 || ui.rect.w <= 0.0 || ui.rect.h <= 0.0 {
+        return false;
+    }
     let x = (((ui_x - ui.rect.x) / ui.rect.w) * client_width)
         .clamp(0.0, client_width - 1.0)
         .round() as i32;
@@ -1006,11 +1011,10 @@ fn post_ui_click(ui: &GameUI, ui_x: f32, ui_y: f32) -> bool {
     const WM_LBUTTONUP: u32 = 0x0202;
     const MK_LBUTTON: usize = 0x0001;
 
-    unsafe {
-        PostMessageW(window, WM_MOUSEMOVE, 0, position) != 0
-            && PostMessageW(window, WM_LBUTTONDOWN, MK_LBUTTON, position) != 0
-            && PostMessageW(window, WM_LBUTTONUP, 0, position) != 0
-    }
+    let moved = unsafe { PostMessageW(window, WM_MOUSEMOVE, 0, position) } != 0;
+    let pressed = unsafe { PostMessageW(window, WM_LBUTTONDOWN, MK_LBUTTON, position) } != 0;
+    let released = unsafe { PostMessageW(window, WM_LBUTTONUP, 0, position) } != 0;
+    moved && pressed && released
 }
 
 fn init(_ctx: &GameCtx) -> ModRegistration {
