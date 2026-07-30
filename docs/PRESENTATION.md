@@ -62,7 +62,7 @@ If automatic Load Anyway is enabled, Intro Skip first copies the latest career s
 
 COMPATIBILITY
 
-Intro Skip 0.4.6 is built for Teamfight Manager 2 0.5.3.
+Intro Skip 0.4.7 supports Teamfight Manager 2 0.5.2 and 0.5.3.
 
 RECOVERY
 
@@ -77,19 +77,19 @@ modifications to covered files must remain available under the same license.
 The original logo, banner, and thumbnail artwork are All Rights Reserved.
 Forks must use their own name and artwork.
 
-## GitHub v0.4.6 release
+## GitHub v0.4.7 release
 
 **Release title**
 
-Intro Skip v0.4.6 — TFM2 0.5.3 Compatibility
+Intro Skip v0.4.7 — TFM2 0.5.2–0.5.3 Compatibility
 
 **Release notes**
 
-Intro Skip provides safe, configurable startup automation for Teamfight Manager 2 0.5.3.
+Intro Skip provides safe, configurable startup automation for Teamfight Manager 2 0.5.2 and 0.5.3.
 
-Version 0.4.6 rebuilds the native mod for the 0.5.3 Mod SDK, reduces repeated
-title-screen UI work, and hardens synthetic clicks for minimized windows and
-partial Windows message failures.
+Version 0.4.7 rebuilds the native mod against the 0.5.2 compatibility baseline
+and verifies that exact DLL on 0.5.3, extending support without separate
+per-game-version packages.
 
 Highlights:
 
@@ -99,11 +99,12 @@ Highlights:
 - create and byte-verify a backup before automatic Load Anyway;
 - retain managed backups for 3, 7, 14, or 30 days;
 - import any of the five latest verified backups into the normal Load menu manually;
-- configure all behavior from the in-game Mods screen.
+- configure all behavior from the in-game Mods screen;
+- use the same controls through Better Mod Menu when it is installed.
 
 Only disclaimer skipping is enabled by default. Automatic Continue and Load Anyway remain opt-in.
 
-Install `intro-skip-v0.4.6.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
+Install `intro-skip-v0.4.7.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
 
 ## Launch post
 
@@ -111,7 +112,7 @@ Install `intro-skip-v0.4.6.zip` from the assets below. Do not use GitHub's autom
 
 It skips the disclaimer, can continue your latest career automatically, and can handle mod-state mismatch prompts—but only after creating and verifying a save backup. The riskier options are off by default, backups are retained for seven days, and recovery always stays manual.
 
-Built for TFM2 0.5.3.
+Supports TFM2 0.5.2 and 0.5.3.
 
 ## Screenshot plan
 

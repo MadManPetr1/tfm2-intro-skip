@@ -11,7 +11,7 @@ Safe, configurable startup automation for **Teamfight Manager 2**.
 </div>
 
 > [!IMPORTANT]
-> Version **0.4.6** is built for Teamfight Manager 2 **0.5.3**.
+> Version **0.4.7** supports Teamfight Manager 2 **0.5.2 and 0.5.3**.
 
 ## Features
 
@@ -23,6 +23,8 @@ Safe, configurable startup automation for **Teamfight Manager 2**.
 - Retains managed backups for a configurable 3, 7, 14, or 30 days.
 - Keeps recovery manual: a backup is imported into the regular **Load** menu only when you request it.
 - Provides all settings directly inside the game's Mods screen.
+- Integrates with Better Mod Menu when installed while preserving the native
+  settings panel as a standalone fallback.
 
 | Setting | Included default |
 | --- | --- |
@@ -75,6 +77,10 @@ Changes are written outside the Workshop-managed mod folder so updates cannot re
 
 Existing `mods\intro_skip\settings.json` values are migrated automatically on first launch.
 
+When Better Mod Menu is enabled, the same controls and recent-backup actions
+appear in its Settings tab. Intro Skip still validates and performs every
+backup action itself.
+
 ## Save safety
 
 Automatic mismatch acceptance follows a guarded sequence:
@@ -103,9 +109,9 @@ Managed backups older than the selected retention period are removed. Diagnostic
 
 ## Requirements and limitations
 
-- Teamfight Manager 2 `0.5.3`
+- Teamfight Manager 2 `0.5.2` or `0.5.3`
 - Windows
-- The matching `0.5.3` Mod SDK for source builds
+- The `0.5.2` Mod SDK compatibility baseline for release builds
 - Automatic UI actions require the game window title `Teamfight Manager2`
 
 ## Building from source
@@ -125,7 +131,7 @@ To validate and create a player-ready release archive:
 .\scripts\package_release.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk"
 ```
 
-The archive is written to `builds\intro-skip-v0.4.6.zip`.
+The archive is written to `builds\intro-skip-v0.4.7.zip`.
 
 ## Project layout
 

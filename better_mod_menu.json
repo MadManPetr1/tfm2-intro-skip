@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "mod_id": "intro_skip",
+  "name": "Intro Skip",
+  "storage": "game_data",
+  "settings_file": "settings.json",
+  "actions_file": "better_mod_menu.actions.json",
+  "display": {
+    "title": "Intro Skip",
+    "author": "MadManPetr1",
+    "version": "0.4.7",
+    "source": "Code",
+    "dependencies": [
+      "base >=0.5.2, <0.5.4"
+    ],
+    "summary": "Safe startup automation for TFM2. Skip the disclaimer, continue the latest career, and accept mod-state mismatches only after a verified backup."
+  },
+  "controls": [
+    {
+      "type": "toggle",
+      "key": "skip_disclaimer",
+      "label": "Skip disclaimer",
+      "category": "Startup automation",
+      "description": "Dismiss the startup disclaimer automatically.",
+      "default": true
+    },
+    {
+      "type": "toggle",
+      "key": "auto_continue",
+      "label": "Continue latest career",
+      "category": "Startup automation",
+      "description": "Press Continue automatically when the title screen is ready.",
+      "default": false
+    },
+    {
+      "type": "toggle",
+      "key": "auto_load_anyway",
+      "label": "Load through mod mismatch",
+      "category": "Startup automation",
+      "description": "Continue only after Intro Skip verifies a fresh save backup.",
+      "default": false
+    },
+    {
+      "type": "choice",
+      "key": "backup_retention_days",
+      "label": "Backup retention",
+      "category": "Backup and recovery",
+      "description": "How long managed safety backups are retained.",
+      "options": [
+        {
+          "label": "3 days",
+          "value": 3
+        },
+        {
+          "label": "7 days",
+          "value": 7
+        },
+        {
+          "label": "14 days",
+          "value": 14
+        },
+        {
+          "label": "30 days",
+          "value": 30
+        }
+      ]
+    },
+    {
+      "type": "file_cards",
+      "action": "import_backup",
+      "label": "Recent verified backups",
+      "category": "Backup and recovery",
+      "description": "Select one to import it into the Load menu.",
+      "directory": "intro_skip_backups",
+      "filename_contains": "__before_mod_load_",
+      "extension": "data",
+      "limit": 5
+    }
+  ]
+}

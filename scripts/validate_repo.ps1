@@ -20,6 +20,8 @@ function Require-File([string]$relativePath) {
     "src/lib.rs",
     "mod.mod_info",
     "mod.override_info",
+    "better_mod_menu.json",
+    "banner.png",
     "settings.json",
     "thumbnail.png",
     "assets/thumbnail-master.png",
@@ -70,6 +72,7 @@ function Get-PngDimensions([string]$relativePath) {
 
 $expectedPngDimensions = @{
     "thumbnail.png" = @(512, 512)
+    "banner.png" = @(1280, 640)
     "assets/banner.png" = @(1280, 640)
     "assets/logo-1024.png" = @(1024, 1024)
     "assets/logo-512.png" = @(512, 512)
@@ -88,6 +91,9 @@ foreach ($relativePath in $expectedPngDimensions.Keys) {
 }
 
 $modInfo = Get-Content -LiteralPath (Join-Path $root "mod.mod_info") -Raw | ConvertFrom-Json
+if ($modInfo.mod_id -ne "intro_skip") {
+    throw "mod.mod_info must declare mod_id intro_skip."
+}
 $settings = Get-Content -LiteralPath (Join-Path $root "settings.json") -Raw | ConvertFrom-Json
 $override = Get-Content -LiteralPath (Join-Path $root "mod.override_info") -Raw | ConvertFrom-Json
 $cargo = Get-Content -LiteralPath (Join-Path $root "Cargo.toml") -Raw

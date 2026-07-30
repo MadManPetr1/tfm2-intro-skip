@@ -114,6 +114,17 @@ impl RuntimeSettings {
             backup_retention_days: self.backup_retention_days.load(Ordering::Acquire),
         }
     }
+
+    fn apply(&self, settings: Settings) {
+        self.skip_disclaimer
+            .store(settings.skip_disclaimer, Ordering::Release);
+        self.auto_continue
+            .store(settings.auto_continue, Ordering::Release);
+        self.auto_load_anyway
+            .store(settings.auto_load_anyway, Ordering::Release);
+        self.backup_retention_days
+            .store(settings.backup_retention_days, Ordering::Release);
+    }
 }
 
 struct StatusNotice {
@@ -159,6 +170,7 @@ struct IntroSkipExtension {
     mismatch_backup_failed: AtomicBool,
     retention_checked: AtomicBool,
     settings_mouse_down: AtomicBool,
+    settings_reload_tick: AtomicUsize,
 }
 
 impl ModExtension for IntroSkipExtension {
@@ -169,8 +181,6 @@ impl ModExtension for IntroSkipExtension {
     }
 
     fn post_update(&self, scene: &mut Scene, ui: &mut GameUI, assets: &mut Assets, _dt: f32) {
-        let settings_mouse_pressed = self.left_mouse_pressed();
-
         if !self.retention_checked.swap(true, Ordering::AcqRel) {
             let _ = cleanup_expired_backups(
                 self.settings.backup_retention_days.load(Ordering::Acquire),
@@ -185,7 +195,18 @@ impl ModExtension for IntroSkipExtension {
             return;
         };
 
-        let show_settings = selected_mod_is_intro_skip(&ui.root, assets);
+        let better_mod_menu_active = node_is_visible(&ui.root, "better_mod_menu_surface");
+        if better_mod_menu_active {
+            let reload_tick = self.settings_reload_tick.fetch_add(1, Ordering::Relaxed);
+            if reload_tick.is_multiple_of(30) {
+                self.settings.apply(load_settings());
+                self.handle_better_mod_menu_action();
+            }
+        } else {
+            self.settings_reload_tick.store(0, Ordering::Relaxed);
+        }
+        let settings_mouse_pressed = !better_mod_menu_active && self.left_mouse_pressed();
+        let show_settings = !better_mod_menu_active && selected_mod_is_intro_skip(&ui.root, assets);
         let was_showing_settings = self
             .settings_panel_visible
             .swap(show_settings, Ordering::AcqRel);
@@ -211,6 +232,39 @@ impl ModExtension for IntroSkipExtension {
 }
 
 impl IntroSkipExtension {
+    fn handle_better_mod_menu_action(&self) {
+        let Some(path) = better_mod_menu_actions_path() else {
+            return;
+        };
+        let Ok(source) = fs::read_to_string(&path) else {
+            return;
+        };
+        let action = read_json_string(&source, "action").unwrap_or_default();
+        let status = match action.as_str() {
+            "import_backup" | "import_latest_backup" => {
+                let index = read_json_u8(&source, "index").unwrap_or(0) as usize;
+                match import_backup(index) {
+                    Ok(imported) => {
+                        record_backup_status(&format!(
+                            "Imported backup {} into the Load menu: {}",
+                            index + 1,
+                            imported.display()
+                        ));
+                        STATUS_IMPORT_SUCCESS
+                    }
+                    Err(error) => {
+                        record_backup_status(&format!("Backup import failed: {error}"));
+                        STATUS_FAILURE
+                    }
+                }
+            }
+            _ => STATUS_FAILURE,
+        };
+        let _ = fs::remove_file(path);
+        self.status_notice.show(status);
+        self.refresh_backup_count();
+    }
+
     fn left_mouse_pressed(&self) -> bool {
         const VK_LBUTTON: i32 = 0x01;
         let is_down = unsafe { GetAsyncKeyState(VK_LBUTTON) } < 0;
@@ -775,6 +829,10 @@ fn settings_path() -> Option<PathBuf> {
     Some(state_dir()?.join("settings.json"))
 }
 
+fn better_mod_menu_actions_path() -> Option<PathBuf> {
+    Some(state_dir()?.join("better_mod_menu.actions.json"))
+}
+
 fn legacy_settings_path() -> Option<PathBuf> {
     let executable = std::env::current_exe().ok()?;
     let game_dir = executable.parent()?;
@@ -861,6 +919,27 @@ fn read_json_u8(source: &str, key: &str) -> Option<u8> {
     let value = source.split_once(&key)?.1.split_once(':')?.1.trim_start();
     let digits: String = value.chars().take_while(char::is_ascii_digit).collect();
     digits.parse().ok()
+}
+
+fn read_json_string(source: &str, key: &str) -> Option<String> {
+    let key = format!("\"{key}\"");
+    let value = source.split_once(&key)?.1.split_once(':')?.1.trim_start();
+    let value = value.strip_prefix('"')?;
+    let mut escaped = false;
+    let mut output = String::new();
+    for character in value.chars() {
+        if escaped {
+            output.push(character);
+            escaped = false;
+            continue;
+        }
+        match character {
+            '\\' => escaped = true,
+            '"' => return Some(output),
+            _ => output.push(character),
+        }
+    }
+    None
 }
 
 #[repr(C)]
@@ -1033,11 +1112,42 @@ fn init(_ctx: &GameCtx) -> ModRegistration {
         mismatch_backup_failed: AtomicBool::new(false),
         retention_checked: AtomicBool::new(false),
         settings_mouse_down: AtomicBool::new(false),
+        settings_reload_tick: AtomicUsize::new(0),
     });
     registration
 }
 
 declare_mod!(init);
+
+#[cfg(test)]
+mod tests {
+    use super::{is_managed_backup, read_json_bool, read_json_string, read_json_u8};
+    use std::path::Path;
+
+    #[test]
+    fn reads_settings_and_better_mod_menu_actions() {
+        let source = r#"{"skip_disclaimer":true,"index":2,"action":"import_backup"}"#;
+        assert_eq!(read_json_bool(source, "skip_disclaimer"), Some(true));
+        assert_eq!(read_json_u8(source, "index"), Some(2));
+        assert_eq!(
+            read_json_string(source, "action").as_deref(),
+            Some("import_backup")
+        );
+    }
+
+    #[test]
+    fn recognizes_only_managed_backup_names() {
+        let path = std::env::temp_dir().join(format!(
+            "save_1__before_mod_load_20260730_0102_{}.data",
+            std::process::id()
+        ));
+        std::fs::write(&path, b"test").expect("create managed-backup fixture");
+        assert!(is_managed_backup(&path));
+        std::fs::remove_file(&path).expect("remove managed-backup fixture");
+        assert!(!is_managed_backup(Path::new("save_1.data")));
+    }
+}
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.

@@ -6,6 +6,25 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.4.7] - 2026-07-29
+
+### Changed
+
+- Rebuilt the native DLL against the Teamfight Manager 2 `0.5.2` Mod SDK as
+  the compatibility baseline.
+- Expanded the supported game range to `>=0.5.2, <0.5.4`.
+- Added optional Better Mod Menu controls and recent-backup actions while
+  preserving the standalone native settings panel.
+- Added the release banner to the player package for rich Better Mod Menu
+  previews.
+- Limited Better Mod Menu settings/action polling to the visible mod-manager
+  surface instead of unrelated scenes.
+
+### Compatibility
+
+- Verified that the exact `0.5.2`-baseline DLL loads, registers, and reaches
+  the rendered title screen on Teamfight Manager 2 `0.5.3`.
+
 ## [0.4.6] - 2026-07-29
 
 ### Changed
@@ -94,7 +113,8 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 - Automatic Load Anyway is blocked unless the latest save has been copied and byte-verified.
 - Recovery import always creates a separate save and remains a manual action.
 
-[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.6...HEAD
+[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.7...HEAD
+[0.4.7]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.6...v0.4.7
 [0.4.6]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.5...v0.4.6
 [0.4.5]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.4...v0.4.5
 [0.4.4]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.3...v0.4.4
