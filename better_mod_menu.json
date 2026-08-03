@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/MadManPetr1/tfm2-better-mod-menu/main/better_mod_menu.schema.json",
   "schema_version": 1,
   "mod_id": "intro_skip",
   "name": "Intro Skip",
@@ -9,10 +10,6 @@
     "title": "Intro Skip",
     "author": "MadManPetr1",
     "version": "0.4.7",
-    "source": "Code",
-    "dependencies": [
-      "base >=0.5.2, <0.5.4"
-    ],
     "summary": "Safe startup automation for TFM2. Skip the disclaimer, continue the latest career, and accept mod-state mismatches only after a verified backup."
   },
   "controls": [

@@ -21,6 +21,8 @@ function Require-File([string]$relativePath) {
     "mod.mod_info",
     "mod.override_info",
     "better_mod_menu.json",
+    "better_mod_menu_profile.json",
+    "profile_icon.png",
     "banner.png",
     "settings.json",
     "thumbnail.png",
@@ -43,6 +45,17 @@ function Require-File([string]$relativePath) {
     "docs/RELEASING.md",
     "scripts/package_release.ps1"
 ) | ForEach-Object { Require-File $_ }
+
+$profile = Get-Content -LiteralPath (Join-Path $root "better_mod_menu_profile.json") -Raw |
+    ConvertFrom-Json
+if ($profile.schema_version -ne 1 -or $profile.profile_icon -ne "profile_icon.png") {
+    throw "better_mod_menu_profile.json must use schema version 1 and profile_icon.png."
+}
+$bmmManifest = Get-Content -LiteralPath (Join-Path $root "better_mod_menu.json") -Raw |
+    ConvertFrom-Json
+if ($bmmManifest.schema_version -ne 1 -or $bmmManifest.mod_id -ne "intro_skip") {
+    throw "better_mod_menu.json must target Intro Skip with schema version 1."
+}
 
 function Get-PngDimensions([string]$relativePath) {
     $path = Join-Path $root $relativePath
@@ -71,7 +84,8 @@ function Get-PngDimensions([string]$relativePath) {
 }
 
 $expectedPngDimensions = @{
-    "thumbnail.png" = @(512, 512)
+    "thumbnail.png" = @(256, 256)
+    "assets/thumbnail-master.png" = @(128, 128)
     "banner.png" = @(1280, 640)
     "assets/banner.png" = @(1280, 640)
     "assets/logo-1024.png" = @(1024, 1024)

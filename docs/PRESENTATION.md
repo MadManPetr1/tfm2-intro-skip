@@ -26,7 +26,7 @@ Upload `assets/banner.png` in **Settings → General → Social preview**.
 
 **Logo assets**
 
-- `thumbnail.png` — 512×512 Workshop/mod thumbnail.
+- `thumbnail.png` — 256×256 lossless 2× nearest-neighbor pixel-art thumbnail.
 - `assets/logo-1024.png` — editable master export.
 - `assets/logo-512.png`, `logo-256.png`, `logo-128.png`, `logo-64.png`, and `logo-32.png` — nearest-neighbour exports for profile and announcement use.
 

@@ -140,7 +140,7 @@ The archive is written to `builds\intro-skip-v0.4.7.zip`.
 - `mod.mod_info` — mod metadata and supported game range
 - `mod.override_info` — asset remapping
 - `settings.json` — source reference for the safe defaults; player settings are stored in AppData
-- `thumbnail.png` — 512×512 in-game/Workshop thumbnail
+- `thumbnail.png` — 256×256 lossless 2× nearest-neighbor pixel-art thumbnail
 - `assets/thumbnail-master.png` — original 128×128 pixel-art thumbnail
 - `assets/logo-1024.png` — official pixel-art logo master
 - `assets/logo-{512,256,128,64,32}.png` — ready-to-use logo exports

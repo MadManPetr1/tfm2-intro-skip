@@ -44,6 +44,8 @@ New-Item -ItemType Directory -Path (Join-Path $runtimeRoot "ui\layout") -Force |
     "mod.mod_info",
     "mod.override_info",
     "better_mod_menu.json",
+    "better_mod_menu_profile.json",
+    "profile_icon.png",
     "banner.png",
     "thumbnail.png",
     "README.md",
