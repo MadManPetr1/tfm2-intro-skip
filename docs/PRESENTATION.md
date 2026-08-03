@@ -62,7 +62,7 @@ If automatic Load Anyway is enabled, Intro Skip first copies the latest career s
 
 COMPATIBILITY
 
-Intro Skip 0.4.7 supports Teamfight Manager 2 0.5.2 and 0.5.3.
+Intro Skip 0.4.8 supports Teamfight Manager 2 0.5.2 and 0.5.3.
 
 RECOVERY
 
@@ -77,19 +77,16 @@ modifications to covered files must remain available under the same license.
 The original logo, banner, and thumbnail artwork are All Rights Reserved.
 Forks must use their own name and artwork.
 
-## GitHub v0.4.7 release
+## GitHub v0.4.8 release
 
 **Release title**
 
-Intro Skip v0.4.7 — TFM2 0.5.2–0.5.3 Compatibility
+Intro Skip v0.4.8 — Better Mod Menu and artwork refresh
 
 **Release notes**
 
-Intro Skip provides safe, configurable startup automation for Teamfight Manager 2 0.5.2 and 0.5.3.
-
-Version 0.4.7 rebuilds the native mod against the 0.5.2 compatibility baseline
-and verifies that exact DLL on 0.5.3, extending support without separate
-per-game-version packages.
+This release completes the Better Mod Menu presentation and integration pass
+without changing startup, settings, backup, or recovery behavior.
 
 Highlights:
 
@@ -100,11 +97,12 @@ Highlights:
 - retain managed backups for 3, 7, 14, or 30 days;
 - import any of the five latest verified backups into the normal Load menu manually;
 - configure all behavior from the in-game Mods screen;
-- use the same controls through Better Mod Menu when it is installed.
+- use the same controls through Better Mod Menu when it is installed;
+- show the unified author profile, refreshed thumbnail, and release banner.
 
 Only disclaimer skipping is enabled by default. Automatic Continue and Load Anyway remain opt-in.
 
-Install `intro-skip-v0.4.7.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
+Install `intro-skip-v0.4.8.zip` from the assets below. Do not use GitHub's automatic Source code archives for installation.
 
 ## Launch post
 

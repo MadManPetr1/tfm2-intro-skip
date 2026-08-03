@@ -6,10 +6,23 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.4.8] - 2026-08-03
+
+### Added
+
+- Unified Better Mod Menu author profile and profile icon.
+- Refreshed 256 px pixel-art thumbnail and release banner.
+
 ### Changed
 
 - Unified the pixel-art source assets and removed redundant logo-size and
   banner copies.
+- Simplified player documentation and removed repository-layout details.
+
+### Compatibility
+
+- Runtime behavior, settings, backups, and the tested TFM2 `0.5.2`-`0.5.3`
+  range are unchanged.
 
 ## [0.4.7] - 2026-07-29
 
@@ -118,7 +131,8 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 - Automatic Load Anyway is blocked unless the latest save has been copied and byte-verified.
 - Recovery import always creates a separate save and remains a manual action.
 
-[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.7...HEAD
+[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.8...HEAD
+[0.4.8]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.7...v0.4.8
 [0.4.7]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.6...v0.4.7
 [0.4.6]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.5...v0.4.6
 [0.4.5]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.4...v0.4.5

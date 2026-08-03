@@ -2,7 +2,7 @@
   "mod_id": "intro_skip",
   "name": "Intro Skip",
   "author": "MadManPetr1",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Safe, configurable startup automation for TFM2 0.5.2-0.5.3. Skip the disclaimer, continue your latest career, and optionally accept mod-state mismatches only after a verified backup. Choose 3-30 day retention and manually import any of the five latest verified backups.",
   "last_updated": "2026-07-29",
   "dependencies": [
