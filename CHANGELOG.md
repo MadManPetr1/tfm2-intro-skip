@@ -6,6 +6,11 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+### Changed
+
+- Unified the pixel-art source assets and removed redundant logo-size and
+  banner copies.
+
 ## [0.4.7] - 2026-07-29
 
 ### Changed

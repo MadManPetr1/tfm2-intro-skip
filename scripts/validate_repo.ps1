@@ -27,13 +27,6 @@ function Require-File([string]$relativePath) {
     "settings.json",
     "thumbnail.png",
     "assets/thumbnail-master.png",
-    "assets/banner.png",
-    "assets/logo-1024.png",
-    "assets/logo-512.png",
-    "assets/logo-256.png",
-    "assets/logo-128.png",
-    "assets/logo-64.png",
-    "assets/logo-32.png",
     "ui/layout/title.ui",
     "README.md",
     "CHANGELOG.md",
@@ -87,13 +80,6 @@ $expectedPngDimensions = @{
     "thumbnail.png" = @(256, 256)
     "assets/thumbnail-master.png" = @(128, 128)
     "banner.png" = @(1280, 640)
-    "assets/banner.png" = @(1280, 640)
-    "assets/logo-1024.png" = @(1024, 1024)
-    "assets/logo-512.png" = @(512, 512)
-    "assets/logo-256.png" = @(256, 256)
-    "assets/logo-128.png" = @(128, 128)
-    "assets/logo-64.png" = @(64, 64)
-    "assets/logo-32.png" = @(32, 32)
 }
 
 foreach ($relativePath in $expectedPngDimensions.Keys) {

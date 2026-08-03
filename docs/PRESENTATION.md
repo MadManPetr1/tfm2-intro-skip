@@ -22,13 +22,13 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=3773405658
 
 **Social preview**
 
-Upload `assets/banner.png` in **Settings → General → Social preview**.
+Upload `banner.png` in **Settings → General → Social preview**.
 
-**Logo assets**
+**Artwork assets**
 
 - `thumbnail.png` — 256×256 lossless 2× nearest-neighbor pixel-art thumbnail.
-- `assets/logo-1024.png` — editable master export.
-- `assets/logo-512.png`, `logo-256.png`, `logo-128.png`, `logo-64.png`, and `logo-32.png` — nearest-neighbour exports for profile and announcement use.
+- `assets/thumbnail-master.png` — original 128×128 editable pixel-art thumbnail.
+- `banner.png` — 1280×640 preview banner.
 
 ## Steam Workshop
 
