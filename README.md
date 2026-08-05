@@ -6,7 +6,7 @@
 
 Safe, configurable startup automation for **Teamfight Manager 2**.
 
-**Intro Skip 0.4.8 · TFM2 0.5.2–0.5.3 · Windows**
+**Intro Skip 0.4.9 · TFM2 0.5.2–0.5.4 · Windows**
 
 </div>
 
@@ -35,7 +35,7 @@ enable it in the Mods screen, and restart when prompted.
 
 ### GitHub release
 
-1. Download `intro-skip-v0.4.8.zip` from
+1. Download `intro-skip-v0.4.9.zip` from
    [GitHub Releases](https://github.com/MadManPetr1/tfm2-intro-skip/releases).
    Do not use GitHub's automatic source-code archive.
 2. Extract `intro_skip` into:
@@ -81,9 +81,9 @@ Recovery remains manual. Diagnostic messages are written to
 
 ## Compatibility
 
-- Teamfight Manager 2 `0.5.2` and `0.5.3`
+- Teamfight Manager 2 `0.5.2` through `0.5.4`
 - Windows
-- Release DLL built against the `0.5.2` compatibility-baseline Mod SDK
+- Release DLL built against the `0.5.4` Mod SDK
 - Automatic UI actions require the window title `Teamfight Manager2`
 
 ## Build and support
@@ -91,9 +91,9 @@ Recovery remains manual. Diagnostic messages are written to
 The Mod SDK is not redistributed. With a matching SDK installed:
 
 ```powershell
-.\build_local.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk"
+.\build_local.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk-0.5.4"
 .\scripts\validate_repo.ps1
-.\scripts\package_release.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk"
+.\scripts\package_release.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk-0.5.4"
 ```
 
 For a bug report, include the game/mod versions, enabled mods, the exact point
