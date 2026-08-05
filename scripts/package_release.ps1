@@ -19,16 +19,16 @@ if (-not $SkipBuild) {
     }
 }
 
-$dll = Join-Path $root "intro_skip.dll"
+$dll = Join-Path $root "tfm2_intro_skip.dll"
 if (-not (Test-Path -LiteralPath $dll -PathType Leaf)) {
-    throw "intro_skip.dll is missing. Build first or remove -SkipBuild."
+    throw "tfm2_intro_skip.dll is missing. Build first or remove -SkipBuild."
 }
 
 $modInfo = Get-Content -LiteralPath (Join-Path $root "mod.mod_info") -Raw | ConvertFrom-Json
 $buildRoot = Join-Path $root "builds"
-$releaseRoot = Join-Path $buildRoot "intro-skip-v$($modInfo.version)"
-$runtimeRoot = Join-Path $releaseRoot "intro_skip"
-$archive = Join-Path $buildRoot "intro-skip-v$($modInfo.version).zip"
+$releaseRoot = Join-Path $buildRoot "tfm2-intro-skip-v$($modInfo.version)"
+$runtimeRoot = Join-Path $releaseRoot "tfm2_intro_skip"
+$archive = Join-Path $buildRoot "tfm2-intro-skip-v$($modInfo.version).zip"
 
 if (Test-Path -LiteralPath $releaseRoot) {
     Remove-Item -LiteralPath $releaseRoot -Recurse -Force
@@ -40,7 +40,7 @@ if (Test-Path -LiteralPath $archive) {
 New-Item -ItemType Directory -Path (Join-Path $runtimeRoot "ui\layout") -Force | Out-Null
 
 @(
-    "intro_skip.dll",
+    "tfm2_intro_skip.dll",
     "mod.mod_info",
     "mod.override_info",
     "better_mod_menu.json",

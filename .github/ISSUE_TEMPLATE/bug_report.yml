@@ -18,7 +18,7 @@ body:
     id: mod-version
     attributes:
       label: Intro Skip version
-      placeholder: "0.4.9"
+      placeholder: "0.5.0"
     validations:
       required: true
   - type: dropdown

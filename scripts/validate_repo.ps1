@@ -43,7 +43,7 @@ if ($profile.schema_version -ne 1 -or $profile.profile_icon -ne "profile_icon.pn
 }
 $bmmManifest = Get-Content -LiteralPath (Join-Path $root "better_mod_menu.json") -Raw |
     ConvertFrom-Json
-if ($bmmManifest.schema_version -ne 1 -or $bmmManifest.mod_id -ne "intro_skip") {
+if ($bmmManifest.schema_version -ne 1 -or $bmmManifest.mod_id -ne "tfm2_intro_skip") {
     throw "better_mod_menu.json must target Intro Skip with schema version 1."
 }
 
@@ -88,8 +88,8 @@ foreach ($relativePath in $expectedPngDimensions.Keys) {
 }
 
 $modInfo = Get-Content -LiteralPath (Join-Path $root "mod.mod_info") -Raw | ConvertFrom-Json
-if ($modInfo.mod_id -ne "intro_skip") {
-    throw "mod.mod_info must declare mod_id intro_skip."
+if ($modInfo.mod_id -ne "tfm2_intro_skip") {
+    throw "mod.mod_info must declare mod_id tfm2_intro_skip."
 }
 $settings = Get-Content -LiteralPath (Join-Path $root "settings.json") -Raw | ConvertFrom-Json
 $override = Get-Content -LiteralPath (Join-Path $root "mod.override_info") -Raw | ConvertFrom-Json
@@ -103,7 +103,7 @@ if (-not $cargoVersionMatch.Success) {
 }
 $lockVersion = [regex]::Match(
     $cargoLock,
-    '(?ms)\[\[package\]\]\s+name\s*=\s*"intro_skip"\s+version\s*=\s*"([^"]+)"'
+    '(?ms)\[\[package\]\]\s+name\s*=\s*"tfm2_intro_skip"\s+version\s*=\s*"([^"]+)"'
 ).Groups[1].Value
 if ($cargoVersionMatch.Groups[1].Value -ne $modInfo.version -or
     $lockVersion -ne $modInfo.version) {
@@ -120,7 +120,7 @@ if ($bmmManifest.display.version -ne $modInfo.version) {
     throw "better_mod_menu.json version must match mod.mod_info."
 }
 foreach ($expected in @(
-    "[code]intro_skip.dll[/code]",
+    "[code]tfm2_intro_skip.dll[/code]",
     "[b]Current version:[/b] v$($modInfo.version)",
     "[url=https://github.com/MadManPetr1/tfm2-intro-skip]Source code on GitHub[/url]"
 )) {
@@ -131,7 +131,7 @@ foreach ($expected in @(
 if ($workshop -notmatch '\[b\]Tested with:\[/b\] TFM2 0\.5\.2.+0\.5\.4') {
     throw "Workshop Tested with line must match the supported base range."
 }
-if ($workshop -notmatch '(?m)^\[b\]Last tested:\[/b\] \d{2}/\d{2}/\d{4}$') {
+if ($workshop -notmatch '(?m)^\[b\]Last tested:\[/b\] \d{2}/\d{2}/\d{4}\r?$') {
     throw "Workshop Last tested must use DD/MM/YYYY."
 }
 
@@ -149,8 +149,11 @@ if ($override.PSObject.Properties.Name -notcontains "asset/base/ui/layout/title"
 }
 
 $source = Get-Content -LiteralPath (Join-Path $root "src/lib.rs") -Raw
-if ($source -notmatch 'const MOD_ID: &str = "intro_skip";') {
-    throw 'The Rust MOD_ID must remain "intro_skip".'
+if ($source -notmatch 'const MOD_ID: &str = "tfm2_intro_skip";') {
+    throw 'The Rust MOD_ID must remain "tfm2_intro_skip".'
+}
+if ($source -notmatch 'const LEGACY_MOD_ID: &str = "intro_skip";') {
+    throw 'The legacy Intro Skip identity must remain available for settings migration.'
 }
 if ($source -notmatch 'const MOD_NAME: &str = "Intro Skip";') {
     throw 'The Rust MOD_NAME must match mod.mod_info.'

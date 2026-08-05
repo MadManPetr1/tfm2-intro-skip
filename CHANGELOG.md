@@ -6,6 +6,19 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-05
+
+### Changed
+
+- Standardized the Cargo crate, mod ID, installed folder, and DLL as
+  `tfm2_intro_skip`.
+- Preserved automatic migration from the previous `intro_skip` settings paths.
+
+### Compatibility
+
+- Runtime identity cleanup; existing managed backups remain in the shared
+  `intro_skip_backups` directory.
+
 ## [0.4.9] - 2026-08-05
 
 ### Changed
@@ -143,7 +156,8 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 - Automatic Load Anyway is blocked unless the latest save has been copied and byte-verified.
 - Recovery import always creates a separate save and remains a manual action.
 
-[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.9...HEAD
+[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.9...v0.5.0
 [0.4.9]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.8...v0.4.9
 [0.4.8]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.7...v0.4.8
 [0.4.7]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.6...v0.4.7

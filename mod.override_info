@@ -1,6 +1,6 @@
 {
   "asset/base/ui/layout/title": {
-    "remapping": "asset/intro_skip/ui/layout/title",
+    "remapping": "asset/tfm2_intro_skip/ui/layout/title",
     "type": "override"
   }
 }
