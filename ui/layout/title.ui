@@ -737,7 +737,7 @@ body:color {
             align_y: Center;
             size: 15;
             color: #ecfbf8ff;
-            text: "Version 0.4.8";
+            text: "Version 0.4.9";
           }
 
           #intro_skip_header_dependencies:label {
@@ -752,7 +752,7 @@ body:color {
             align_y: Center;
             size: 14;
             color: #a3a9b6ff;
-            text: "Requires base >=0.5.2, <0.5.4";
+            text: "Requires base >=0.5.2, <0.5.5";
           }
         }
       }

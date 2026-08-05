@@ -29,13 +29,10 @@ function Require-File([string]$relativePath) {
     "assets/thumbnail-master.png",
     "ui/layout/title.ui",
     "README.md",
+    "workshop_description.txt",
     "CHANGELOG.md",
-    "CONTRIBUTING.md",
-    "SECURITY.md",
     "LICENSE",
     "NOTICE.md",
-    "docs/PRESENTATION.md",
-    "docs/RELEASING.md",
     "scripts/package_release.ps1"
 ) | ForEach-Object { Require-File $_ }
 
@@ -97,16 +94,45 @@ if ($modInfo.mod_id -ne "intro_skip") {
 $settings = Get-Content -LiteralPath (Join-Path $root "settings.json") -Raw | ConvertFrom-Json
 $override = Get-Content -LiteralPath (Join-Path $root "mod.override_info") -Raw | ConvertFrom-Json
 $cargo = Get-Content -LiteralPath (Join-Path $root "Cargo.toml") -Raw
+$cargoLock = Get-Content -LiteralPath (Join-Path $root "Cargo.lock") -Raw
+$workshop = Get-Content -LiteralPath (Join-Path $root "workshop_description.txt") -Raw
 
 $cargoVersionMatch = [regex]::Match($cargo, '(?m)^version\s*=\s*"([^"]+)"')
 if (-not $cargoVersionMatch.Success) {
     throw "Could not read the package version from Cargo.toml."
 }
-if ($cargoVersionMatch.Groups[1].Value -ne $modInfo.version) {
-    throw "Version mismatch: Cargo.toml is $($cargoVersionMatch.Groups[1].Value), mod.mod_info is $($modInfo.version)."
+$lockVersion = [regex]::Match(
+    $cargoLock,
+    '(?ms)\[\[package\]\]\s+name\s*=\s*"intro_skip"\s+version\s*=\s*"([^"]+)"'
+).Groups[1].Value
+if ($cargoVersionMatch.Groups[1].Value -ne $modInfo.version -or
+    $lockVersion -ne $modInfo.version) {
+    throw "Version mismatch between Cargo.toml, Cargo.lock, and mod.mod_info."
 }
 if ($cargo -notmatch '(?m)^license\s*=\s*"MPL-2\.0"') {
     throw "Cargo.toml must declare MPL-2.0."
+}
+$base = @($modInfo.dependencies | Where-Object { $_.mod_id -eq "base" })
+if ($base.Count -ne 1 -or $base[0].version -ne ">=0.5.2, <0.5.5") {
+    throw "Intro Skip must declare the supported 0.5.2-0.5.4 base range."
+}
+if ($bmmManifest.display.version -ne $modInfo.version) {
+    throw "better_mod_menu.json version must match mod.mod_info."
+}
+foreach ($expected in @(
+    "[code]intro_skip.dll[/code]",
+    "[b]Current version:[/b] v$($modInfo.version)",
+    "[url=https://github.com/MadManPetr1/tfm2-intro-skip]Source code on GitHub[/url]"
+)) {
+    if ($workshop -notmatch [regex]::Escape($expected)) {
+        throw "Workshop description is missing or inconsistent: $expected"
+    }
+}
+if ($workshop -notmatch '\[b\]Tested with:\[/b\] TFM2 0\.5\.2.+0\.5\.4') {
+    throw "Workshop Tested with line must match the supported base range."
+}
+if ($workshop -notmatch '(?m)^\[b\]Last tested:\[/b\] \d{2}/\d{2}/\d{4}$') {
+    throw "Workshop Last tested must use DD/MM/YYYY."
 }
 
 foreach ($setting in "skip_disclaimer", "auto_continue", "auto_load_anyway") {

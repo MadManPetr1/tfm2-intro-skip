@@ -6,6 +6,18 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.4.9] - 2026-08-05
+
+### Changed
+
+- Rebuilt the native DLL against the Teamfight Manager 2 `0.5.4` Mod SDK.
+- Extended the supported base range to `>=0.5.2, <0.5.5` while preserving
+  existing settings and backup data.
+
+### Compatibility
+
+- Runtime-tested on Teamfight Manager 2 `0.5.4`.
+
 ## [0.4.8] - 2026-08-03
 
 ### Added
@@ -131,7 +143,8 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 - Automatic Load Anyway is blocked unless the latest save has been copied and byte-verified.
 - Recovery import always creates a separate save and remains a manual action.
 
-[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.8...HEAD
+[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.9...HEAD
+[0.4.9]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.8...v0.4.9
 [0.4.8]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.7...v0.4.8
 [0.4.7]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.6...v0.4.7
 [0.4.6]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.5...v0.4.6

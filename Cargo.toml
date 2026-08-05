@@ -1,9 +1,9 @@
 [package]
 name = "intro_skip"
-version = "0.4.8"
+version = "0.4.9"
 edition = "2021"
 authors = ["MadManPetr1"]
-description = "Skips the startup disclaimer in Teamfight Manager 2 v0.5.2-v0.5.3"
+description = "Skips the startup disclaimer in Teamfight Manager 2 v0.5.2-v0.5.4"
 license = "MPL-2.0"
 readme = "README.md"
 repository = "https://github.com/MadManPetr1/tfm2-intro-skip"
