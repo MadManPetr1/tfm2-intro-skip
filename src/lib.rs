@@ -10,7 +10,8 @@ use std::sync::{
 };
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-const MOD_ID: &str = "intro_skip";
+const MOD_ID: &str = "tfm2_intro_skip";
+const LEGACY_MOD_ID: &str = "intro_skip";
 const MOD_NAME: &str = "Intro Skip";
 const SETTINGS_PANEL_ID: &str = "intro_skip_settings";
 const GAME_WINDOW_TITLE: &[u16] = &[
@@ -833,10 +834,23 @@ fn better_mod_menu_actions_path() -> Option<PathBuf> {
     Some(state_dir()?.join("better_mod_menu.actions.json"))
 }
 
-fn legacy_settings_path() -> Option<PathBuf> {
-    let executable = std::env::current_exe().ok()?;
-    let game_dir = executable.parent()?;
-    Some(game_dir.join("mods").join(MOD_ID).join("settings.json"))
+fn legacy_settings_paths() -> Vec<PathBuf> {
+    let mut paths = Vec::new();
+    if let Some(data_dir) = game_data_dir() {
+        paths.push(data_dir.join(LEGACY_MOD_ID).join("settings.json"));
+    }
+    if let Ok(executable) = std::env::current_exe() {
+        if let Some(game_dir) = executable.parent() {
+            paths.push(game_dir.join("mods").join(MOD_ID).join("settings.json"));
+            paths.push(
+                game_dir
+                    .join("mods")
+                    .join(LEGACY_MOD_ID)
+                    .join("settings.json"),
+            );
+        }
+    }
+    paths
 }
 
 fn load_settings() -> Settings {
@@ -847,7 +861,10 @@ fn load_settings() -> Settings {
 
     let (source, mut should_persist) = match fs::read_to_string(&path) {
         Ok(source) => (source, false),
-        Err(_) => match legacy_settings_path().and_then(|path| fs::read_to_string(path).ok()) {
+        Err(_) => match legacy_settings_paths()
+            .into_iter()
+            .find_map(|path| fs::read_to_string(path).ok())
+        {
             Some(source) => (source, true),
             None => {
                 let _ = write_settings(settings);

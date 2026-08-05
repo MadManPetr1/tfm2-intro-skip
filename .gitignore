@@ -1,5 +1,6 @@
 /target/
 /builds/
+/tfm2_intro_skip.dll
 /intro_skip.dll
 /mod.workshop_id
 *.pdb

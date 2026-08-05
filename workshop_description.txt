@@ -38,11 +38,11 @@ Before the optional Load Anyway action is used, the mod creates and verifies a b
 
 This mod contains native code:
 
-[code]intro_skip.dll[/code]
+[code]tfm2_intro_skip.dll[/code]
 
 [url=https://github.com/MadManPetr1/tfm2-intro-skip]Source code on GitHub[/url]
 
-[b]Current version:[/b] v0.4.9
+[b]Current version:[/b] v0.5.0
 [b]Last tested:[/b] 05/08/2026
 
 When reporting a problem, include your game version, enabled mods, the point where startup stopped, and relevant sanitized backup_status.log lines.

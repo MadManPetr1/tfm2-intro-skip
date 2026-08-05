@@ -19,7 +19,7 @@ $manifest = Join-Path $PSScriptRoot "Cargo.toml"
 $targetDir = Join-Path $PSScriptRoot "target"
 $baseVersion = (Get-Content -LiteralPath (Join-Path $sdk "base_version.txt") -Raw).Trim()
 if ($baseVersion -ne "0.5.4") {
-    throw "Intro Skip 0.4.9 must be built with the 0.5.4 Mod SDK; found $baseVersion."
+    throw "Intro Skip 0.5.0 must be built with the 0.5.4 Mod SDK; found $baseVersion."
 }
 
 $pinned = Select-String -LiteralPath (Join-Path $sdk "rust-toolchain.toml") `
@@ -80,7 +80,7 @@ if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
 
-$builtDll = Join-Path $targetDir "release\intro_skip.dll"
-$outputDll = Join-Path $PSScriptRoot "intro_skip.dll"
+$builtDll = Join-Path $targetDir "release\tfm2_intro_skip.dll"
+$outputDll = Join-Path $PSScriptRoot "tfm2_intro_skip.dll"
 Copy-Item -LiteralPath $builtDll -Destination $outputDll -Force
 Write-Host "Build successful: $outputDll"

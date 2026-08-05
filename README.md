@@ -6,7 +6,7 @@
 
 Safe, configurable startup automation for **Teamfight Manager 2**.
 
-**Intro Skip 0.4.9 · TFM2 0.5.2–0.5.4 · Windows**
+**Intro Skip 0.5.0 · TFM2 0.5.2–0.5.4 · Windows**
 
 </div>
 
@@ -35,10 +35,10 @@ enable it in the Mods screen, and restart when prompted.
 
 ### GitHub release
 
-1. Download `intro-skip-v0.4.9.zip` from
+1. Download `tfm2-intro-skip-v0.5.0.zip` from
    [GitHub Releases](https://github.com/MadManPetr1/tfm2-intro-skip/releases).
    Do not use GitHub's automatic source-code archive.
-2. Extract `intro_skip` into:
+2. Extract `tfm2_intro_skip` into:
 
    ```text
    ...\SteamLibrary\steamapps\common\Teamfight Manager2\mods\
@@ -46,8 +46,8 @@ enable it in the Mods screen, and restart when prompted.
 
 3. Enable **Intro Skip** and restart the game.
 
-The final folder must contain `intro_skip\mod.mod_info` and
-`intro_skip\intro_skip.dll`.
+The final folder must contain `tfm2_intro_skip\mod.mod_info` and
+`tfm2_intro_skip\tfm2_intro_skip.dll`.
 
 ## Configure
 
@@ -56,11 +56,12 @@ want. Settings are stored outside the Workshop folder so updates do not replace
 them:
 
 ```text
-%APPDATA%\TeamSamoyed\TeamfightManager2\data\intro_skip\settings.json
+%APPDATA%\TeamSamoyed\TeamfightManager2\data\tfm2_intro_skip\settings.json
 ```
 
-Existing settings from `mods\intro_skip\settings.json` are migrated on first
-launch. Better Mod Menu shows the same controls and recent-backup actions when
+Existing settings from `data\intro_skip\settings.json` or
+`mods\intro_skip\settings.json` are migrated on first launch. Better Mod Menu
+shows the same controls and recent-backup actions when
 installed; Intro Skip still validates and performs every action itself.
 
 ## Backup protection
@@ -73,7 +74,7 @@ Before automatic **Load Anyway**, Intro Skip:
 4. continues only after verification succeeds.
 
 Recovery remains manual. Diagnostic messages are written to
-`data\intro_skip\backup_status.log`.
+`data\tfm2_intro_skip\backup_status.log`.
 
 > [!WARNING]
 > A verified backup reduces recovery risk but cannot make incompatible mod
