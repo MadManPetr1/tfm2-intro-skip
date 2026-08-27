@@ -6,6 +6,64 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.5.4] - 2026-08-27
+
+### Fixed
+
+- Updated the Better Mod Menu runtime-surface contract so Intro Skip settings
+  remain synchronized in the current menu.
+- Stopped Intro Skip from rewriting shared native details text while Better Mod
+  Menu owns the selected-mod panel.
+- Hid only Intro Skip-owned native settings nodes while Better Mod Menu is open,
+  preventing panel ownership conflicts without affecting standalone settings.
+
+### Compatibility
+
+- Built and manually tested with Better Mod Menu `0.7.5` on Teamfight Manager 2
+  `0.5.7`; startup settings and existing managed backups remain compatible.
+
+## [0.5.3] - 2026-08-26
+
+### Changed
+
+- Rebuilt the native DLL against the Teamfight Manager 2 `0.5.7` Mod SDK.
+- Restricted the declared base range to `>=0.5.7, <0.5.8` because the native
+  SDK libraries changed and older game versions have not been runtime-tested
+  with this build.
+
+### Compatibility
+
+- Tested on Teamfight Manager 2 `0.5.7` while preserving existing settings and
+  managed backups.
+
+## [0.5.2] - 2026-08-20
+
+### Changed
+
+- Rebuilt the native DLL against the Teamfight Manager 2 `0.5.6` Mod SDK.
+- Restricted the declared base range to `>=0.5.6, <0.5.7` because the native
+  SDK libraries changed and older game versions have not been runtime-tested
+  with this build.
+
+### Compatibility
+
+- Tested on Teamfight Manager 2 `0.5.6` while preserving existing settings and
+  managed backups.
+
+## [0.5.1] - 2026-08-12
+
+### Changed
+
+- Rebuilt the native DLL against the Teamfight Manager 2 `0.5.5` Mod SDK.
+- Restricted the declared base range to `>=0.5.5, <0.5.6` because the native
+  SDK libraries changed and older game versions have not been runtime-tested
+  with this build.
+
+### Compatibility
+
+- Tested on Teamfight Manager 2 `0.5.5` while preserving existing settings and
+  managed backups.
+
 ## [0.5.0] - 2026-08-05
 
 ### Changed
@@ -156,7 +214,11 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 - Automatic Load Anyway is blocked unless the latest save has been copied and byte-verified.
 - Recovery import always creates a separate save and remains a manual action.
 
-[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.5.4...HEAD
+[0.5.4]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.5.3...v0.5.4
+[0.5.3]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.5.2...v0.5.3
+[0.5.2]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.5.1...v0.5.2
+[0.5.1]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.9...v0.5.0
 [0.4.9]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.8...v0.4.9
 [0.4.8]: https://github.com/MadManPetr1/tfm2-intro-skip/compare/v0.4.7...v0.4.8

@@ -14,6 +14,7 @@ const MOD_ID: &str = "tfm2_intro_skip";
 const LEGACY_MOD_ID: &str = "intro_skip";
 const MOD_NAME: &str = "Intro Skip";
 const SETTINGS_PANEL_ID: &str = "intro_skip_settings";
+const BMM_SURFACE_ID: &str = "bmm_surface";
 const GAME_WINDOW_TITLE: &[u16] = &[
     84, 101, 97, 109, 102, 105, 103, 104, 116, 32, 77, 97, 110, 97, 103, 101, 114, 50, 0,
 ];
@@ -60,6 +61,14 @@ struct Settings {
     auto_continue: bool,
     auto_load_anyway: bool,
     backup_retention_days: u8,
+}
+
+fn should_sync_native_settings_panel(
+    better_mod_menu_active: bool,
+    show_settings: bool,
+    was_showing_settings: bool,
+) -> bool {
+    !better_mod_menu_active && (show_settings || was_showing_settings)
 }
 
 #[derive(Clone, Copy)]
@@ -196,7 +205,7 @@ impl ModExtension for IntroSkipExtension {
             return;
         };
 
-        let better_mod_menu_active = node_is_visible(&ui.root, "better_mod_menu_surface");
+        let better_mod_menu_active = node_is_visible(&ui.root, BMM_SURFACE_ID);
         if better_mod_menu_active {
             let reload_tick = self.settings_reload_tick.fetch_add(1, Ordering::Relaxed);
             if reload_tick.is_multiple_of(30) {
@@ -215,7 +224,13 @@ impl ModExtension for IntroSkipExtension {
             self.refresh_backup_count();
         }
         let status = self.status_notice.current_and_tick();
-        if show_settings || was_showing_settings {
+        if better_mod_menu_active {
+            hide_intro_skip_settings_panel(&mut ui.root);
+        } else if should_sync_native_settings_panel(
+            better_mod_menu_active,
+            show_settings,
+            was_showing_settings,
+        ) {
             sync_settings_panel(
                 &mut ui.root,
                 self.settings.snapshot(),
@@ -528,6 +543,12 @@ fn sync_settings_panel(
         status == STATUS_IMPORT_SUCCESS,
     );
     set_node_visible(root, STATUS_FAILURE_ID, status == STATUS_FAILURE);
+}
+
+fn hide_intro_skip_settings_panel(root: &mut Node) {
+    set_node_visible(root, SETTINGS_PANEL_ID, false);
+    set_node_visible(root, "intro_skip_header_version", false);
+    set_node_visible(root, "intro_skip_header_dependencies", false);
 }
 
 fn game_data_dir() -> Option<PathBuf> {
@@ -1138,7 +1159,10 @@ declare_mod!(init);
 
 #[cfg(test)]
 mod tests {
-    use super::{is_managed_backup, read_json_bool, read_json_string, read_json_u8};
+    use super::{
+        is_managed_backup, read_json_bool, read_json_string, read_json_u8,
+        should_sync_native_settings_panel, BMM_SURFACE_ID,
+    };
     use std::path::Path;
 
     #[test]
@@ -1150,6 +1174,19 @@ mod tests {
             read_json_string(source, "action").as_deref(),
             Some("import_backup")
         );
+    }
+
+    #[test]
+    fn uses_the_better_mod_menu_runtime_surface_contract() {
+        assert_eq!(BMM_SURFACE_ID, "bmm_surface");
+    }
+
+    #[test]
+    fn better_mod_menu_owns_native_text_visibility_while_open() {
+        assert!(!should_sync_native_settings_panel(true, false, true));
+        assert!(should_sync_native_settings_panel(false, true, false));
+        assert!(should_sync_native_settings_panel(false, false, true));
+        assert!(!should_sync_native_settings_panel(false, false, false));
     }
 
     #[test]
