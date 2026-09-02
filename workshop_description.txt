@@ -18,7 +18,7 @@ Automatic mismatch handling can remain disabled while still using the disclaimer
 
 [h2]Compatibility[/h2]
 
-[b]Tested with:[/b] TFM2 0.5.7
+[b]Tested with:[/b] TFM2 0.5.8
 
 Compatibility with later game versions is not guaranteed until confirmed.
 
@@ -42,7 +42,7 @@ This mod contains native code:
 
 [url=https://github.com/MadManPetr1/tfm2-intro-skip]Source code on GitHub[/url]
 
-[b]Current version:[/b] v0.5.4
-[b]Last tested:[/b] 27/08/2026
+[b]Current version:[/b] v0.5.5
+[b]Last tested:[/b] 02/09/2026
 
 When reporting a problem, include your game version, enabled mods, the point where startup stopped, and relevant sanitized backup_status.log lines.

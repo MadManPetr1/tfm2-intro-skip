@@ -6,6 +6,18 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.5.5] - 2026-09-02
+
+### Changed
+
+- Rebuilt the native DLL against the Teamfight Manager 2 `0.5.8` Mod SDK.
+- Updated the declared base range to `>=0.5.8, <0.5.9`.
+
+### Compatibility
+
+- Tested on Teamfight Manager 2 `0.5.8`; existing settings and managed backups
+  remain compatible.
+
 ## [0.5.4] - 2026-08-27
 
 ### Fixed
