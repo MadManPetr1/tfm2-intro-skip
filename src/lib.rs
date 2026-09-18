@@ -1,4 +1,4 @@
-use mod_api::*;
+use mod_api_stable::*;
 use std::ffi::c_void;
 use std::fs;
 use std::fs::OpenOptions;
@@ -63,6 +63,19 @@ struct Settings {
     backup_retention_days: u8,
 }
 
+#[cfg(test)]
+mod stable_migration_tests {
+    use super::should_spawn_title_early;
+
+    #[test]
+    fn spawns_the_title_only_while_the_enabled_disclaimer_is_blocking_it() {
+        assert!(should_spawn_title_early(true, true, false));
+        assert!(!should_spawn_title_early(false, true, false));
+        assert!(!should_spawn_title_early(true, false, false));
+        assert!(!should_spawn_title_early(true, true, true));
+    }
+}
+
 fn should_sync_native_settings_panel(
     better_mod_menu_active: bool,
     show_settings: bool,
@@ -71,13 +84,23 @@ fn should_sync_native_settings_panel(
     !better_mod_menu_active && (show_settings || was_showing_settings)
 }
 
+fn should_spawn_title_early(
+    skip_disclaimer: bool,
+    disclaimer_exists: bool,
+    body_exists: bool,
+) -> bool {
+    skip_disclaimer && disclaimer_exists && !body_exists
+}
+
 #[derive(Clone, Copy)]
+#[cfg(any())]
 enum SettingKey {
     SkipDisclaimer,
     AutoContinue,
     AutoLoadAnyway,
 }
 
+#[cfg(any())]
 impl SettingKey {
     fn store(self, settings: &RuntimeSettings, value: bool) {
         match self {
@@ -181,8 +204,179 @@ struct IntroSkipExtension {
     retention_checked: AtomicBool,
     settings_mouse_down: AtomicBool,
     settings_reload_tick: AtomicUsize,
+    title_injected: AtomicBool,
+    startup_tree_logged: AtomicBool,
 }
 
+impl StableExtension for IntroSkipExtension {
+    fn on_init(&self, _ctx: &mut StableClient<'_>) {
+        record_runtime_status("Stable API: Intro Skip client extension initialized");
+        if !self.retention_checked.swap(true, Ordering::AcqRel) {
+            let _ = cleanup_expired_backups(
+                self.settings.backup_retention_days.load(Ordering::Acquire),
+            );
+        }
+    }
+
+    fn post_update(&self, ctx: &mut StableClient<'_>, _dt_micros: u64) {
+        if !self.startup_tree_logged.swap(true, Ordering::AcqRel) {
+            let disclaimer_children = ctx.ui_child_names("disclaimer");
+            let disclaimer_descendants = disclaimer_children
+                .iter()
+                .map(|child| {
+                    let path = format!("disclaimer.{child}");
+                    (
+                        path.clone(),
+                        ctx.ui_runner_name(&path),
+                        ctx.ui_child_names(&path),
+                    )
+                })
+                .collect::<Vec<_>>();
+            record_runtime_status(&format!(
+                "Stable API startup UI: scene={:?}, root={:?}, disclaimer_runner={:?}, disclaimer_state={:?}, disclaimer_children={:?}, disclaimer_descendants={:?}",
+                ctx.scene_kind(),
+                ctx.ui_child_names(""),
+                ctx.ui_runner_name("disclaimer"),
+                ctx.ui_state_json("disclaimer"),
+                disclaimer_children,
+                disclaimer_descendants
+            ));
+        }
+        let reload_tick = self.settings_reload_tick.fetch_add(1, Ordering::Relaxed);
+        if reload_tick.is_multiple_of(30) {
+            self.settings.apply(load_settings());
+            self.handle_stable_better_mod_menu_action();
+        }
+
+        let settings = self.settings.snapshot();
+        if should_spawn_title_early(
+            settings.skip_disclaimer,
+            ctx.ui_exists("disclaimer"),
+            ctx.ui_exists("body"),
+        ) && !self.title_injected.load(Ordering::Acquire)
+        {
+            let spawned = ctx.ui_spawn_template("disclaimer", "asset/base/ui/layout/title", true);
+            let transparent = spawned
+                && ctx.ui_set_properties("disclaimer", "color: #0f101600;")
+                && ctx.ui_set_visible("disclaimer.text", false);
+            self.title_injected.store(transparent, Ordering::Release);
+            if transparent {
+                record_runtime_status(
+                    "Stable API: title screen spawned over the startup disclaimer",
+                );
+            }
+        }
+
+        if !ctx.ui_exists("body") {
+            return;
+        }
+
+        self.try_stable_auto_continue(ctx);
+        self.try_stable_auto_load_anyway(ctx);
+    }
+}
+
+impl IntroSkipExtension {
+    fn handle_stable_better_mod_menu_action(&self) {
+        let Some(path) = better_mod_menu_actions_path() else {
+            return;
+        };
+        let Ok(source) = fs::read_to_string(&path) else {
+            return;
+        };
+        let action = read_json_string(&source, "action").unwrap_or_default();
+        let status = match action.as_str() {
+            "import_backup" | "import_latest_backup" => {
+                let index = read_json_u8(&source, "index").unwrap_or(0) as usize;
+                match import_backup(index) {
+                    Ok(imported) => {
+                        record_backup_status(&format!(
+                            "Imported backup {} into the Load menu: {}",
+                            index + 1,
+                            imported.display()
+                        ));
+                        STATUS_IMPORT_SUCCESS
+                    }
+                    Err(error) => {
+                        record_backup_status(&format!("Backup import failed: {error}"));
+                        STATUS_FAILURE
+                    }
+                }
+            }
+            _ => STATUS_FAILURE,
+        };
+        let _ = fs::remove_file(path);
+        self.status_notice.show(status);
+        self.refresh_stable_backup_count();
+    }
+
+    fn refresh_stable_backup_count(&self) {
+        let count = backup_dir()
+            .and_then(|directory| recent_backups(&directory, BACKUP_BUTTON_IDS.len()).ok())
+            .map_or(0, |backups| backups.len() as u8);
+        self.backup_count.store(count, Ordering::Release);
+    }
+
+    fn try_stable_auto_continue(&self, ctx: &StableClient<'_>) {
+        if !self.settings.auto_continue.load(Ordering::Acquire)
+            || self.auto_continue_sent.load(Ordering::Acquire)
+        {
+            return;
+        }
+        let Some(rect) = ctx.ui_node_rect("body.buttons.continue") else {
+            return;
+        };
+        if self.title_ready_frames.fetch_add(1, Ordering::Relaxed) < 2 {
+            return;
+        }
+        if post_stable_ui_click(rect) {
+            self.auto_continue_sent.store(true, Ordering::Release);
+        }
+    }
+
+    fn try_stable_auto_load_anyway(&self, ctx: &StableClient<'_>) {
+        if ctx.ui_visible("body.mod_compat_popup") != Some(true) {
+            self.mismatch_ready_frames.store(0, Ordering::Release);
+            self.mismatch_click_sent.store(false, Ordering::Release);
+            self.mismatch_backup_ready.store(false, Ordering::Release);
+            self.mismatch_backup_failed.store(false, Ordering::Release);
+            return;
+        }
+        if !self.settings.auto_load_anyway.load(Ordering::Acquire)
+            || self.mismatch_click_sent.load(Ordering::Acquire)
+            || self.mismatch_ready_frames.fetch_add(1, Ordering::Relaxed) < 2
+        {
+            return;
+        }
+        if !self.mismatch_backup_ready.load(Ordering::Acquire)
+            && !self.mismatch_backup_failed.load(Ordering::Acquire)
+        {
+            match backup_latest_save(self.settings.backup_retention_days.load(Ordering::Acquire)) {
+                Ok(path) => {
+                    record_backup_status(&format!("Backup ready: {}", path.display()));
+                    self.mismatch_backup_ready.store(true, Ordering::Release);
+                }
+                Err(error) => {
+                    record_backup_status(&format!(
+                        "Automatic Load Anyway stopped because backup failed: {error}"
+                    ));
+                    self.mismatch_backup_failed.store(true, Ordering::Release);
+                }
+            }
+        }
+        if !self.mismatch_backup_ready.load(Ordering::Acquire) {
+            return;
+        }
+        if ctx
+            .ui_node_rect("body.mod_compat_popup.force")
+            .is_some_and(post_stable_ui_click)
+        {
+            self.mismatch_click_sent.store(true, Ordering::Release);
+        }
+    }
+}
+
+#[cfg(any())]
 impl ModExtension for IntroSkipExtension {
     fn on_init(&self, scene: &mut Scene, _ui: &mut GameUI, _assets: &mut Assets) {
         if self.settings.skip_disclaimer.load(Ordering::Acquire) {
@@ -247,6 +441,7 @@ impl ModExtension for IntroSkipExtension {
     }
 }
 
+#[cfg(any())]
 impl IntroSkipExtension {
     fn handle_better_mod_menu_action(&self) {
         let Some(path) = better_mod_menu_actions_path() else {
@@ -430,6 +625,7 @@ impl IntroSkipExtension {
     }
 }
 
+#[cfg(any())]
 fn skip_disclaimer(scene: &mut Scene) {
     if let Scene::Title {
         disclaimer: Some(progress),
@@ -439,6 +635,7 @@ fn skip_disclaimer(scene: &mut Scene) {
     }
 }
 
+#[cfg(any())]
 fn find_node<'a>(node: &'a Node, id: &str) -> Option<&'a Node> {
     if node.id == id {
         return Some(node);
@@ -446,6 +643,7 @@ fn find_node<'a>(node: &'a Node, id: &str) -> Option<&'a Node> {
     node.child.iter().find_map(|child| find_node(child, id))
 }
 
+#[cfg(any())]
 fn find_visible_node<'a>(node: &'a Node, id: &str, ancestors_visible: bool) -> Option<&'a Node> {
     let visible = ancestors_visible && node.visible;
     if node.id == id {
@@ -459,10 +657,12 @@ fn find_visible_node<'a>(node: &'a Node, id: &str, ancestors_visible: bool) -> O
         .find_map(|child| find_visible_node(child, id, visible))
 }
 
+#[cfg(any())]
 fn node_is_visible(node: &Node, id: &str) -> bool {
     find_visible_node(node, id, true).is_some()
 }
 
+#[cfg(any())]
 fn set_node_visible(node: &mut Node, id: &str, visible: bool) -> bool {
     if node.id == id {
         node.visible = visible;
@@ -473,6 +673,7 @@ fn set_node_visible(node: &mut Node, id: &str, visible: bool) -> bool {
         .any(|child| set_node_visible(child, id, visible))
 }
 
+#[cfg(any())]
 fn node_contains_point(root: &Node, id: &str, x: f32, y: f32) -> bool {
     let Some(node) = find_visible_node(root, id, true) else {
         return false;
@@ -485,6 +686,7 @@ fn node_contains_point(root: &Node, id: &str, x: f32, y: f32) -> bool {
         && y <= node.rect.y + node.rect.h
 }
 
+#[cfg(any())]
 fn selected_mod_is_intro_skip(root: &Node, assets: &Assets) -> bool {
     let Some(name_node) = find_node(root, "mod_name") else {
         return false;
@@ -501,6 +703,7 @@ fn selected_mod_is_intro_skip(root: &Node, assets: &Assets) -> bool {
         .is_some_and(|name| name == MOD_NAME)
 }
 
+#[cfg(any())]
 fn sync_settings_panel(
     root: &mut Node,
     settings: Settings,
@@ -545,6 +748,7 @@ fn sync_settings_panel(
     set_node_visible(root, STATUS_FAILURE_ID, status == STATUS_FAILURE);
 }
 
+#[cfg(any())]
 fn hide_intro_skip_settings_panel(root: &mut Node) {
     set_node_visible(root, SETTINGS_PANEL_ID, false);
     set_node_visible(root, "intro_skip_header_version", false);
@@ -1039,6 +1243,7 @@ fn local_timestamp() -> String {
     )
 }
 
+#[cfg(any())]
 fn post_node_click(ui: &GameUI, id: &str) -> bool {
     let Some(node) = find_node(&ui.root, id) else {
         return false;
@@ -1055,6 +1260,43 @@ fn game_window() -> *mut c_void {
     unsafe { FindWindowW(std::ptr::null(), GAME_WINDOW_TITLE.as_ptr()) }
 }
 
+fn post_stable_ui_click((ui_x, ui_y, ui_width, ui_height): (f32, f32, f32, f32)) -> bool {
+    let window = game_window();
+    if window.is_null() || ui_width <= 0.0 || ui_height <= 0.0 {
+        return false;
+    }
+    let mut rect = ClientRect {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+    };
+    if unsafe { GetClientRect(window, &mut rect) } == 0 {
+        return false;
+    }
+    let client_width = rect.right - rect.left;
+    let client_height = rect.bottom - rect.top;
+    if client_width <= 0 || client_height <= 0 {
+        return false;
+    }
+    let x = (((ui_x + ui_width * 0.5) / 1920.0) * client_width as f32)
+        .clamp(0.0, (client_width - 1) as f32)
+        .round() as i32;
+    let y = (((ui_y + ui_height * 0.5) / 1080.0) * client_height as f32)
+        .clamp(0.0, (client_height - 1) as f32)
+        .round() as i32;
+    let position = ((y as isize) << 16) | ((x as isize) & 0xffff);
+    const WM_MOUSEMOVE: u32 = 0x0200;
+    const WM_LBUTTONDOWN: u32 = 0x0201;
+    const WM_LBUTTONUP: u32 = 0x0202;
+    const MK_LBUTTON: usize = 0x0001;
+    let moved = unsafe { PostMessageW(window, WM_MOUSEMOVE, 0, position) } != 0;
+    let pressed = unsafe { PostMessageW(window, WM_LBUTTONDOWN, MK_LBUTTON, position) } != 0;
+    let released = unsafe { PostMessageW(window, WM_LBUTTONUP, 0, position) } != 0;
+    moved && pressed && released
+}
+
+#[cfg(any())]
 fn cursor_ui_position(ui: &GameUI) -> Option<(f32, f32)> {
     let window = game_window();
     if window.is_null() {
@@ -1094,6 +1336,7 @@ fn cursor_ui_position(ui: &GameUI) -> Option<(f32, f32)> {
     ))
 }
 
+#[cfg(any())]
 fn post_ui_click(ui: &GameUI, ui_x: f32, ui_y: f32) -> bool {
     let window = game_window();
     if window.is_null() {
@@ -1134,6 +1377,7 @@ fn post_ui_click(ui: &GameUI, ui_x: f32, ui_y: f32) -> bool {
     moved && pressed && released
 }
 
+#[cfg(any())]
 fn init(_ctx: &GameCtx) -> ModRegistration {
     let settings = Arc::new(RuntimeSettings::new(load_settings()));
     let mut registration = ModRegistration::new(MOD_ID);
@@ -1155,7 +1399,34 @@ fn init(_ctx: &GameCtx) -> ModRegistration {
     registration
 }
 
+#[cfg(any())]
 declare_mod!(init);
+
+fn init_stable(host: &StableHost) -> StableMod {
+    host.log(LogLevel::Info, "Intro Skip 0.6.0 stable module initialized");
+    let settings = Arc::new(RuntimeSettings::new(load_settings()));
+    let mut registration = StableMod::new(MOD_ID);
+    registration.set_extension(IntroSkipExtension {
+        settings,
+        status_notice: Arc::new(StatusNotice::new()),
+        backup_count: AtomicU8::new(0),
+        settings_panel_visible: AtomicBool::new(false),
+        title_ready_frames: AtomicUsize::new(0),
+        auto_continue_sent: AtomicBool::new(false),
+        mismatch_ready_frames: AtomicUsize::new(0),
+        mismatch_click_sent: AtomicBool::new(false),
+        mismatch_backup_ready: AtomicBool::new(false),
+        mismatch_backup_failed: AtomicBool::new(false),
+        retention_checked: AtomicBool::new(false),
+        settings_mouse_down: AtomicBool::new(false),
+        settings_reload_tick: AtomicUsize::new(0),
+        title_injected: AtomicBool::new(false),
+        startup_tree_logged: AtomicBool::new(false),
+    });
+    registration
+}
+
+declare_stable_mod!(init_stable);
 
 #[cfg(test)]
 mod tests {

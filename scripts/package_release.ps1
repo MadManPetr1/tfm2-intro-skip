@@ -37,7 +37,7 @@ if (Test-Path -LiteralPath $archive) {
     Remove-Item -LiteralPath $archive -Force
 }
 
-New-Item -ItemType Directory -Path (Join-Path $runtimeRoot "ui\layout") -Force | Out-Null
+New-Item -ItemType Directory -Path $runtimeRoot -Force | Out-Null
 
 @(
     "tfm2_intro_skip.dll",
@@ -55,10 +55,6 @@ New-Item -ItemType Directory -Path (Join-Path $runtimeRoot "ui\layout") -Force |
 ) | ForEach-Object {
     Copy-Item -LiteralPath (Join-Path $root $_) -Destination (Join-Path $runtimeRoot $_)
 }
-
-Copy-Item `
-    -LiteralPath (Join-Path $root "ui\layout\title.ui") `
-    -Destination (Join-Path $runtimeRoot "ui\layout\title.ui")
 
 Compress-Archive -LiteralPath $runtimeRoot -DestinationPath $archive -CompressionLevel Optimal
 

@@ -6,7 +6,7 @@
 
 Safe, configurable startup automation for **Teamfight Manager 2**.
 
-**Intro Skip 0.5.5 · TFM2 0.5.8 · Windows**
+**Intro Skip 0.6.0 · TFM2 0.6.0 · Windows**
 
 </div>
 
@@ -17,7 +17,7 @@ Safe, configurable startup automation for **Teamfight Manager 2**.
 - Optionally accepts a mod-state mismatch only after creating and verifying a backup.
 - Keeps managed backups for 3, 7, 14, or 30 days.
 - Lets you import one of the five latest verified backups into the normal Load menu.
-- Works with Better Mod Menu while retaining its native settings panel.
+- Integrates with Better Mod Menu while retaining a plain JSON fallback.
 
 | Setting | Default |
 | --- | --- |
@@ -35,7 +35,7 @@ enable it in the Mods screen, and restart when prompted.
 
 ### GitHub release
 
-1. Download `tfm2-intro-skip-v0.5.5.zip` from
+1. Download `tfm2-intro-skip-v0.6.0.zip` from
    [GitHub Releases](https://github.com/MadManPetr1/tfm2-intro-skip/releases).
    Do not use GitHub's automatic source-code archive.
 2. Extract `tfm2_intro_skip` into:
@@ -61,8 +61,9 @@ them:
 
 Existing settings from `data\intro_skip\settings.json` or
 `mods\intro_skip\settings.json` are migrated on first launch. Better Mod Menu
-shows the same controls and recent-backup actions when
-installed; Intro Skip still validates and performs every action itself.
+shows the controls and recent-backup actions when installed; Intro Skip still
+validates and performs every action itself. Without Better Mod Menu, edit the
+same JSON file while the game is closed.
 
 ## Backup protection
 
@@ -82,9 +83,9 @@ Recovery remains manual. Diagnostic messages are written to
 
 ## Compatibility
 
-- Teamfight Manager 2 `0.5.8`
+- Teamfight Manager 2 `0.6.0`
 - Windows
-- Release DLL built against the `0.5.8` Mod SDK
+- Native DLL migrated to the supported Stable Mod API
 - Automatic UI actions require the window title `Teamfight Manager2`
 
 ## Build and support
@@ -92,9 +93,9 @@ Recovery remains manual. Diagnostic messages are written to
 The Mod SDK is not redistributed. With a matching SDK installed:
 
 ```powershell
-.\build_local.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk-0.5.8"
+.\build_local.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk-stable"
 .\scripts\validate_repo.ps1
-.\scripts\package_release.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk-0.5.8"
+.\scripts\package_release.ps1 -SdkDir "C:\path\to\Teamfight Manager2\mod-sdk-stable"
 ```
 
 For a bug report, include the game/mod versions, enabled mods, the exact point

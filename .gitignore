@@ -1,4 +1,5 @@
 /target/
+/vendor/
 /builds/
 /tfm2_intro_skip.dll
 /intro_skip.dll

@@ -6,6 +6,20 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-09-19
+
+### Changed
+
+- Migrated Intro Skip from the retired classic API to the supported Stable Mod API.
+- Reimplemented the disclaimer skip by mounting the game's native title layout
+  without removing scene-owned UI state.
+- Migrated Continue and verified Load Anyway automation to Stable UI queries.
+- Preserved existing settings, managed backups, and Better Mod Menu integration.
+
+### Compatibility
+
+- Tested on Teamfight Manager 2 `0.6.0` with the Stable SDK.
+
 ## [0.5.5] - 2026-09-02
 
 ### Changed

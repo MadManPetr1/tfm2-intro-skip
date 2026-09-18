@@ -27,7 +27,6 @@ function Require-File([string]$relativePath) {
     "settings.json",
     "thumbnail.png",
     "assets/thumbnail-master.png",
-    "ui/layout/title.ui",
     "README.md",
     "workshop_description.txt",
     "CHANGELOG.md",
@@ -92,7 +91,6 @@ if ($modInfo.mod_id -ne "tfm2_intro_skip") {
     throw "mod.mod_info must declare mod_id tfm2_intro_skip."
 }
 $settings = Get-Content -LiteralPath (Join-Path $root "settings.json") -Raw | ConvertFrom-Json
-$override = Get-Content -LiteralPath (Join-Path $root "mod.override_info") -Raw | ConvertFrom-Json
 $cargo = Get-Content -LiteralPath (Join-Path $root "Cargo.toml") -Raw
 $cargoLock = Get-Content -LiteralPath (Join-Path $root "Cargo.lock") -Raw
 $workshop = Get-Content -LiteralPath (Join-Path $root "workshop_description.txt") -Raw
@@ -113,8 +111,8 @@ if ($cargo -notmatch '(?m)^license\s*=\s*"MPL-2\.0"') {
     throw "Cargo.toml must declare MPL-2.0."
 }
 $base = @($modInfo.dependencies | Where-Object { $_.mod_id -eq "base" })
-if ($base.Count -ne 1 -or $base[0].version -ne ">=0.5.8, <0.5.9") {
-    throw "Intro Skip must declare the supported 0.5.8 base range."
+if ($base.Count -ne 1 -or $base[0].version -ne ">=0.6.0, <0.7.0") {
+    throw "Intro Skip must declare the supported 0.6.x base range."
 }
 if ($bmmManifest.display.version -ne $modInfo.version) {
     throw "better_mod_menu.json version must match mod.mod_info."
@@ -128,7 +126,7 @@ foreach ($expected in @(
         throw "Workshop description is missing or inconsistent: $expected"
     }
 }
-if ($workshop -notmatch '\[b\]Tested with:\[/b\] TFM2 0\.5\.8') {
+if ($workshop -notmatch '\[b\]Tested with:\[/b\] TFM2 0\.6\.0') {
     throw "Workshop Tested with line must match the supported base range."
 }
 if ($workshop -notmatch '(?m)^\[b\]Last tested:\[/b\] \d{2}/\d{2}/\d{4}\r?$') {
@@ -144,10 +142,6 @@ if ($settings.backup_retention_days -notin @(3, 7, 14, 30)) {
     throw "settings.json backup_retention_days must be 3, 7, 14, or 30."
 }
 
-if ($override.PSObject.Properties.Name -notcontains "asset/base/ui/layout/title") {
-    throw "mod.override_info does not remap the title layout."
-}
-
 $source = Get-Content -LiteralPath (Join-Path $root "src/lib.rs") -Raw
 if ($source -notmatch 'const MOD_ID: &str = "tfm2_intro_skip";') {
     throw 'The Rust MOD_ID must remain "tfm2_intro_skip".'
@@ -159,15 +153,9 @@ if ($source -notmatch 'const MOD_NAME: &str = "Intro Skip";') {
     throw 'The Rust MOD_NAME must match mod.mod_info.'
 }
 
-$titleLayout = Get-Content -LiteralPath (Join-Path $root "ui/layout/title.ui") -Raw
-$headerVersion = [regex]::Escape("text: `"Version $($modInfo.version)`";")
-if ($titleLayout -notmatch $headerVersion) {
-    throw "The Intro Skip header version must match mod.mod_info."
-}
-
 Push-Location $root
 try {
-    cargo fmt --check
+    cargo fmt --check --package tfm2_intro_skip
     if ($LASTEXITCODE -ne 0) {
         throw "cargo fmt --check failed."
     }

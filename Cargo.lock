@@ -3,5 +3,12 @@
 version = 4
 
 [[package]]
+name = "mod-api-stable"
+version = "0.1.0"
+
+[[package]]
 name = "tfm2_intro_skip"
-version = "0.5.5"
+version = "0.6.0"
+dependencies = [
+ "mod-api-stable",
+]
