@@ -9,18 +9,10 @@
   "display": {
     "title": "Intro Skip",
     "author": "MadManPetr1",
-    "version": "0.6.0",
-    "summary": "Safe startup automation for TFM2. Skip the disclaimer, continue the latest career, and accept mod-state mismatches only after a verified backup."
+    "version": "0.6.1",
+    "summary": "Safe startup automation for TFM2. Continue the latest career and accept mod-state mismatches only after a verified backup."
   },
   "controls": [
-    {
-      "type": "toggle",
-      "key": "skip_disclaimer",
-      "label": "Skip disclaimer",
-      "category": "Startup automation",
-      "description": "Dismiss the startup disclaimer automatically.",
-      "default": true
-    },
     {
       "type": "toggle",
       "key": "auto_continue",

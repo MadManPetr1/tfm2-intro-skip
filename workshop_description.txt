@@ -1,20 +1,21 @@
 [h1]Intro Skip[/h1]
 
-[b]Skip the repetitive startup flow and return to your latest career faster.[/b]
+[b]Automate the safe part of startup and return to your latest career faster.[/b]
 
 Each startup action can be configured separately, with backup protection available for optional mod-state mismatch handling.
 
 [h2]Features[/h2]
 
 [list]
-[*] Skip the startup disclaimer.
 [*] Automatically select Continue.
 [*] Optionally load through a mod-state mismatch after creating and verifying a backup.
 [*] Choose automatic backup retention from 3 to 30 days.
 [*] Manually recover from the latest verified backups.
 [/list]
 
-Automatic mismatch handling can remain disabled while still using the disclaimer skip and auto-continue features.
+TFM2 0.6.0 does not expose a safe disclaimer-progress control through its Stable API. This release waits for the disclaimer to finish instead of showing unusable title controls early.
+
+Automatic mismatch handling can remain disabled while still using auto-continue.
 
 [h2]Compatibility[/h2]
 
@@ -42,7 +43,7 @@ This mod contains native code:
 
 [url=https://github.com/MadManPetr1/tfm2-intro-skip]Source code on GitHub[/url]
 
-[b]Current version:[/b] v0.6.0
+[b]Current version:[/b] v0.6.1
 [b]Last tested:[/b] 19/09/2026
 
 When reporting a problem, include your game version, enabled mods, the point where startup stopped, and relevant sanitized backup_status.log lines.

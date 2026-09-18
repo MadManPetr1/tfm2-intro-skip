@@ -68,8 +68,8 @@ mod stable_migration_tests {
     use super::should_spawn_title_early;
 
     #[test]
-    fn spawns_the_title_only_while_the_enabled_disclaimer_is_blocking_it() {
-        assert!(should_spawn_title_early(true, true, false));
+    fn never_exposes_an_interactive_title_while_the_disclaimer_scene_is_active() {
+        assert!(!should_spawn_title_early(true, true, false));
         assert!(!should_spawn_title_early(false, true, false));
         assert!(!should_spawn_title_early(true, false, false));
         assert!(!should_spawn_title_early(true, true, true));
@@ -85,11 +85,13 @@ fn should_sync_native_settings_panel(
 }
 
 fn should_spawn_title_early(
-    skip_disclaimer: bool,
-    disclaimer_exists: bool,
-    body_exists: bool,
+    _skip_disclaimer: bool,
+    _disclaimer_exists: bool,
+    _body_exists: bool,
 ) -> bool {
-    skip_disclaimer && disclaimer_exists && !body_exists
+    // Stable API 0.6.0 can mount title UI, but cannot advance the scene-owned
+    // disclaimer state. Showing that UI early creates non-interactive controls.
+    false
 }
 
 #[derive(Clone, Copy)]

@@ -6,13 +6,12 @@
 
 Safe, configurable startup automation for **Teamfight Manager 2**.
 
-**Intro Skip 0.6.0 · TFM2 0.6.0 · Windows**
+**Intro Skip 0.6.1 · TFM2 0.6.0 · Windows**
 
 </div>
 
 ## What it does
 
-- Skips the startup disclaimer.
 - Optionally selects **Continue** when the title screen is ready.
 - Optionally accepts a mod-state mismatch only after creating and verifying a backup.
 - Keeps managed backups for 3, 7, 14, or 30 days.
@@ -21,7 +20,6 @@ Safe, configurable startup automation for **Teamfight Manager 2**.
 
 | Setting | Default |
 | --- | --- |
-| Skip disclaimer | On |
 | Continue latest career | Off |
 | Load through mod mismatch | Off |
 | Backup retention | 7 days |
@@ -35,7 +33,7 @@ enable it in the Mods screen, and restart when prompted.
 
 ### GitHub release
 
-1. Download `tfm2-intro-skip-v0.6.0.zip` from
+1. Download `tfm2-intro-skip-v0.6.1.zip` from
    [GitHub Releases](https://github.com/MadManPetr1/tfm2-intro-skip/releases).
    Do not use GitHub's automatic source-code archive.
 2. Extract `tfm2_intro_skip` into:
@@ -87,6 +85,10 @@ Recovery remains manual. Diagnostic messages are written to
 - Windows
 - Native DLL migrated to the supported Stable Mod API
 - Automatic UI actions require the window title `Teamfight Manager2`
+
+TFM2 0.6.0's Stable API does not expose the scene-owned disclaimer progress.
+Intro Skip therefore waits for that screen to finish instead of drawing title
+controls before the game can accept them.
 
 ## Build and support
 

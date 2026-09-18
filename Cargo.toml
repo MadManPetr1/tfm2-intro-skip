@@ -1,6 +1,6 @@
 [package]
 name = "tfm2_intro_skip"
-version = "0.6.0"
+version = "0.6.1"
 edition = "2021"
 authors = ["MadManPetr1"]
 description = "Safe startup automation for Teamfight Manager 2"

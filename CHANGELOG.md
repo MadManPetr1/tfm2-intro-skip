@@ -6,6 +6,20 @@ The project uses [Semantic Versioning](https://semver.org/) for mod releases.
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-09-19
+
+### Fixed
+
+- Removed the early title overlay that appeared interactive while the game was
+  still waiting for its scene-owned disclaimer timer.
+- Removed the unavailable disclaimer toggle from Better Mod Menu on TFM2 0.6.0.
+- Kept automatic Continue, verified Load Anyway, retention, and recovery active.
+
+### Compatibility
+
+- The TFM2 0.6.0 Stable API does not expose disclaimer progress, so this
+  release waits for the native disclaimer instead of presenting frozen controls.
+
 ## [0.6.0] - 2026-09-19
 
 ### Changed
